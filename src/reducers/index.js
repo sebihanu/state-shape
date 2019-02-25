@@ -1,7 +1,10 @@
 import { combineReducers } from 'redux'
-import postsReducer from './posts'
+import posts from './entities/posts'
+import myLatestPosts from './myLatestPosts'
 
+const entities = combineReducers({ posts });
 
 export default combineReducers({
-  posts: postsReducer
+  myLatestPosts,
+  entities
 })

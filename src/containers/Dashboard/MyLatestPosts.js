@@ -3,6 +3,7 @@ import { compose, bindActionCreators } from 'redux'
 import { connect } from 'react-redux';
 import * as postActions from 'actions/posts';
 import Post from 'components/Posts/Post';
+import { getPosts } from 'selectors/myLatestPosts'
 
 class MyLatestPosts extends Component {
     componentDidMount() {
@@ -10,14 +11,13 @@ class MyLatestPosts extends Component {
     }
 
     render() {
-        const { postsLoading, postsLoaded } = { ...this.props.posts };
-        const posts = this.props.posts.data;
+        const { postsLoading, postsLoaded } = { ...this.props };
+        const posts = this.props.posts;
         return (
             <div>
                 {postsLoading && (<div>Loading</div>)}
-                {postsLoaded && (<div>Loaded</div>)}
-                {posts && posts.length > 0 && posts.map(p => (
-                    <Post key={p.id} />
+                {postsLoaded && posts.map(p => (
+                    <Post key={p.id} {...p} />
                 ))}
             </div>
         );
@@ -26,7 +26,9 @@ class MyLatestPosts extends Component {
 
 function mapStateToProps(state) {
     return {
-        posts: state.posts
+        posts: getPosts(state),
+        postsLoading: state.myLatestPosts.loading,
+        postsLoaded: state.myLatestPosts.loaded
     };
 }
 

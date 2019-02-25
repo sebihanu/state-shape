@@ -1,8 +1,11 @@
 const initialState = {
-    posts:{
-        data: [],
-        postsLoading: false,
-        postsLoaded: false
+    entities:{
+        posts: []
+    },
+    myLatestPosts:{
+        ids: [],
+        loading: false,
+        loaded: false
     }    
 };
 

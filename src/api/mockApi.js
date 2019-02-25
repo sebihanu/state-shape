@@ -22,9 +22,9 @@ const blogs = [
     { id: 3, name: 'Blog3', ownerId: 3, subCategoryId: 3 }];
 
 const posts = [
-    { id: 1, name: 'Post11', blogId: 1, labels: [1, 2], updated: '2019-01-31T00:00:00.000Z', content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit' },
-    { id: 2, name: 'Post12', blogId: 1, labels: [3], updated: '2019-01-31T00:00:00.000Z', content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit' },
-    { id: 3, name: 'Post21', blogId: 2, labels: [], updated: '2019-01-31T00:00:00.000Z', content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit' }];
+    { id: 1, name: 'Post11', blogId: 1, labels: [1, 2], updated: new Date('2019-01-31T00:00:00.000Z'), content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit' },
+    { id: 2, name: 'Post12', blogId: 1, labels: [3], updated: new Date('2019-01-31T00:00:00.000Z'), content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit' },
+    { id: 3, name: 'Post21', blogId: 2, labels: [], updated: new Date('2019-01-31T00:00:00.000Z'), content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit' }];
 
 const comments = [
     { id: 1, content: 'Comment11', postId: 1, userId: 1, created: '2019-01-31T00:00:00.000Z' },

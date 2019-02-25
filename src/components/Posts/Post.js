@@ -1,34 +1,41 @@
 import React from 'react'
-import { Grid, Paper } from '@material-ui/core';
+import { Grid, Divider } from '@material-ui/core';
 import PropTypes from 'prop-types';
 
 const post = (props) => {
     return (
         <Grid container spacing={8}>
             <Grid item sm={6}>
-                <Paper>12/21/2019 10:31</Paper>
+                <div>{props.updated.toDateString()}</div>
             </Grid>
             <Grid item sm={6}>
-                <Paper>Label1, Label2</Paper>
+                <div>
+                    {props.labels && props.labels.length > 0 && props.labels.map(l => (
+                        <React.Fragment key={l}>{ l }</React.Fragment>
+                    ))}
+                </div>
             </Grid>
             <Grid item sm={12}>
-                <Paper>%POST NAME%</Paper>
+                <div>{props.name}</div>
             </Grid>
             <Grid item sm={12}>
-                <Paper>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat</Paper>
+                <div>{props.content}</div>
             </Grid>
             <Grid item sm={12}>
-                <Paper>Comments ^</Paper>
+                <div>Comments ^</div>
             </Grid>
             <Grid item sm={12}>
-                <Paper>%COMMENTS LIST%</Paper>
+                <div>%COMMENTS LIST%</div>
             </Grid>
+            <Grid item sm={12}>
+                <Divider  />
+            </Grid>            
         </Grid>
     );
 }
 
 post.propTypes = {
-    date: PropTypes.instanceOf(Date).isRequired,
+    updated: PropTypes.instanceOf(Date).isRequired,
     labels: PropTypes.array,
     name: PropTypes.string.isRequired,
     content: PropTypes.string,
