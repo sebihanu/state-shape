@@ -24,18 +24,17 @@ const blogs = [
 const posts = [
     { id: 1, name: 'Post11', blogId: 1, labels: [1, 2], updated: '2019-01-31T00:00:00.000Z', content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit' },
     { id: 2, name: 'Post12', blogId: 1, labels: [3], updated: '2019-01-31T00:00:00.000Z', content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit' },
-    { id: 2, name: 'Post21', blogId: 2, labels: [], updated: '2019-01-31T00:00:00.000Z', content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit' }];
+    { id: 3, name: 'Post21', blogId: 2, labels: [], updated: '2019-01-31T00:00:00.000Z', content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit' }];
 
 const comments = [
     { id: 1, content: 'Comment11', postId: 1, userId: 1, created: '2019-01-31T00:00:00.000Z' },
     { id: 2, content: 'Comment12', postId: 1, userId: 2, created: '2019-01-31T00:00:00.000Z' },
     { id: 3, content: 'Comment13', postId: 1, userId: 1, created: '2019-01-31T00:00:00.000Z' }];
 
-const delay = 400
+const delay = 1000
 
 export class MockApi {
-    static get = (result) => {
-        debugger
+    static get = (result) => {        
         return new Promise((resolve) => {
             setTimeout(() => {
                 resolve(Object.assign([], result));

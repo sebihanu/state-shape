@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux'
-import reducer1 from './reducer1'
+import postsReducer from './posts'
 
 
 export default combineReducers({
-  state1: reducer1
+  posts: postsReducer
 })

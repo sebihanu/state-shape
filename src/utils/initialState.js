@@ -1,8 +1,9 @@
 const initialState = {
-    state1: {
-        k1: 'default1',
-        k2: 0
-    }
+    posts:{
+        data: [],
+        postsLoading: false,
+        postsLoaded: false
+    }    
 };
 
 export default initialState;
