@@ -1,7 +1,7 @@
 import React from 'react';
-import Header from './layout/Header'
-import Main from './layout/Main'
-import Footer from './layout/Footer'
+import Header from './components/layout/Header'
+import Main from './components/layout/Main'
+import Footer from './components/layout/Footer'
 import PropTypes from 'prop-types';
 
 class App extends React.PureComponent {

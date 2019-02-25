@@ -1,12 +1,12 @@
 import React from 'react';
 import { Switch, Route} from 'react-router-dom';
 
-import Comp1Container from 'components/feature1/Comp1Container';
+import Dashboard from 'containers/Dashboard/Dashboard';
 
 
 export default (
   <Switch>            
-    <Route component={Comp1Container} />
+    <Route component={Dashboard} />
   </Switch>
 );
 
