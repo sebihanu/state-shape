@@ -4,6 +4,7 @@ import thunk from 'redux-thunk';
 import reduxImmutableState from 'redux-immutable-state-invariant';
 import reducers from '../reducers';
 import initialState from './initialState';
+import reduxApiMiddleware from './reduxApiMiddleware'
 
 function configureStore(initialState) {
     const composeEnhancers = typeof window === 'object' &&
@@ -16,6 +17,7 @@ function configureStore(initialState) {
         composeEnhancers(
             applyMiddleware(
                 thunk,
+                reduxApiMiddleware,
                 reduxImmutableState(),
                 logger)
         ));

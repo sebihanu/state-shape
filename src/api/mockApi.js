@@ -34,9 +34,9 @@ const comments = [
 const delay = 1000
 
 export class MockApi {
-    static get = (result) => {        
+    static get = (result) => {                
         return new Promise((resolve) => {
-            setTimeout(() => {
+            setTimeout(() => {                
                 resolve(Object.assign([], result));
             }, delay);
         });
@@ -48,8 +48,8 @@ export class MockApi {
         return this.get(subCategories.filter(a => a.categoryId === categoryId));
     };
 
-    static getPostsByBlog(filter, orderBy, paginationInfo){
-        return this.get(posts);
+    static getPostsByBlog(filter, orderBy, page = 1, pageSize = 10){
+        return MockApi.get(posts);
     }
 
     //UC0: getUsers; getCategories; getSubCategoriesByCategory; getLabels
