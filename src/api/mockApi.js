@@ -34,22 +34,28 @@ const comments = [
 const delay = 1000
 
 export class MockApi {
-    static get = (result) => {                
+    static get = (result) => {
         return new Promise((resolve) => {
-            setTimeout(() => {                
+            setTimeout(() => {
                 resolve(Object.assign([], result));
             }, delay);
         });
     }
-    
+
     static getUsers = () => this.get(users);
     static getCategories = () => this.get(categories);
     static getSubCategoriesByCategory = (categoryId) => {
         return this.get(subCategories.filter(a => a.categoryId === categoryId));
     };
 
-    static getPostsByBlog(filter, orderBy, page = 1, pageSize = 10){
-        return MockApi.get(posts);
+    static getPostsByBlog(filter, orderBy, page = 1, pageSize = 10) {
+        let result = posts.map(p => {
+            const postLabels = (p.labels || []).map(id => labels.find(x => x.id === id));
+            const postComments = comments.filter(c => c.postId === p.id);            
+
+            return { ...p, labels: postLabels, comments: postComments };
+        });
+        return MockApi.get(result);
     }
 
     //UC0: getUsers; getCategories; getSubCategoriesByCategory; getLabels

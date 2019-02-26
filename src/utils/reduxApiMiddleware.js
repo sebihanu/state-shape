@@ -1,3 +1,6 @@
+import { normalize } from 'normalizr'
+import { camelizeKeys } from 'humps'
+
 export const CALL_API = 'Call API'
 
 function createApiMiddleware(extraArgument) {
@@ -6,8 +9,8 @@ function createApiMiddleware(extraArgument) {
         if (typeof callAPI === 'undefined') {
             return next(action)
         }
-        
-        let { prom, types } = callAPI;
+
+        const { prom, promParams, types, schema } = callAPI;
 
         if (!Array.isArray(types) || types.length !== 3) {
             throw new Error('Expected an array of three action types.')
@@ -15,6 +18,10 @@ function createApiMiddleware(extraArgument) {
 
         if (!types.every(type => typeof type === 'string')) {
             throw new Error('Expected action types to be strings.')
+        }
+
+        if (!schema) {
+            throw new Error('Specify one of the exported Schemas.');
         }
 
         const actionWith = data => {
@@ -26,9 +33,15 @@ function createApiMiddleware(extraArgument) {
         const [requestType, successType, failureType] = types
         next(actionWith({ type: requestType }))
 
-        prom().then(
-            response => next(actionWith({ type: successType, payload: response })),
-            error => next(actionWith({ type: failureType, error: error.message || 'Something bad happened' })));      
+        prom(...Object.values(promParams)).then(
+            response => {
+                //const json = JSON.stringify(response);
+                const camelizedJson = camelizeKeys(response);
+                let payload = Object.assign({}, normalize(camelizedJson, schema));
+
+                return next(actionWith({ type: successType, params: promParams, ...payload }))
+            },
+            error => next(actionWith({ type: failureType, error: error.message || 'Something bad happened' })));
     };
 }
 

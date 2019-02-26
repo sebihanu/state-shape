@@ -7,7 +7,10 @@ import { getPosts } from 'selectors/myLatestPosts'
 
 class MyLatestPosts extends Component {
     componentDidMount() {
-        this.props.actions.loadPosts();
+        this.props.actions.loadPosts('filter', 'orderBy', 10, 1);
+        setTimeout(() => {            
+            this.props.actions.loadPosts('filter', 'orderBy', 10, 1);
+        }, 3000);
     }
 
     render() {
@@ -18,7 +21,7 @@ class MyLatestPosts extends Component {
                 {postsLoading && (<div>Loading</div>)}
                 {postsLoaded && posts.map(p => (
                     <Post key={p.id} {...p} />
-                ))}
+                ))}                
             </div>
         );
     }

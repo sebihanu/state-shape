@@ -3,7 +3,7 @@ import initialState from 'utils/initialState';
 
 const reducer = (state = initialState.myLatestPosts, action) => {
     switch (action.type) {
-        case types.LOAD_POSTS_STARTED: {            
+        case types.LOAD_POSTS_STARTED: {
             return {
                 ...state,
                 loading: true
@@ -11,13 +11,14 @@ const reducer = (state = initialState.myLatestPosts, action) => {
         }
 
         case types.LOAD_POSTS_SUCCEEDED: {
-            let ids = action.payload.map(p => p.id);
-
+            const { params } = action;                            
+            
             return {
-                ...state,                
-                ids: ids,
+                ...state,
+                ids: action.result,
                 loading: false,
-                loaded: true
+                loaded: true,
+                mapIds: new Map([...state.mapIds, [JSON.stringify(params), action.result]])
             };
         }
 

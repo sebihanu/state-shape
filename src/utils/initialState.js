@@ -1,12 +1,15 @@
 const initialState = {
-    entities:{
-        posts: []
+    entities: {
+        posts: {},
+        users: {},
+        comments: {}
     },
-    myLatestPosts:{
+    myLatestPosts: {
         ids: [],
+        mapIds: new Map(),
         loading: false,
         loaded: false
-    }    
+    }
 };
 
 export default initialState;
