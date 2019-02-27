@@ -8,7 +8,7 @@ import schemas from 'utils/schemas'
 // const loadPostSucceeded = (posts) => ({ type: types.LOAD_POSTS_SUCCEEDED, payload: posts });
 // const loadPostFailed = () => ({ type: types.LOAD_POSTS_FAILED });
 
-export const loadPosts = (filter, orderBy, page, pageSize) => {
+export const loadPosts = (filter, orderBy, page = 1, pageSize = 3) => {
     return async dispatch => {
         // const actions = bindActionCreators({ loadPostStarted, loadPostSucceeded, loadPostFailed }, dispatch);
 

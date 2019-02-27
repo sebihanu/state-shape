@@ -11,14 +11,18 @@ const reducer = (state = initialState.myLatestPosts, action) => {
         }
 
         case types.LOAD_POSTS_SUCCEEDED: {
-            const { params } = action;                            
-            
+            const { params } = action;
+            const { page, pageSize, ...rest } = params;
+
+            const mapIds = { ...state.mapIds };
+            mapIds[JSON.stringify(rest)] = { ids: action.result, page, pageSize };
+
             return {
                 ...state,
-                ids: action.result,
+                ids: state.ids.concat(action.result),
                 loading: false,
                 loaded: true,
-                mapIds: new Map([...state.mapIds, [JSON.stringify(params), action.result]])
+                mapIds: mapIds
             };
         }
 

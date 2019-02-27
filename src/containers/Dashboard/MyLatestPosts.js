@@ -7,10 +7,10 @@ import { getPosts } from 'selectors/myLatestPosts'
 
 class MyLatestPosts extends Component {
     componentDidMount() {
-        this.props.actions.loadPosts('filter', 'orderBy', 10, 1);
-        setTimeout(() => {            
-            this.props.actions.loadPosts('filter', 'orderBy', 10, 1);
-        }, 3000);
+        this.props.actions.loadPosts('', 'latest');
+        setTimeout(() => {
+            this.props.actions.loadPosts('', 'latest', 2);
+        }, 10000);
     }
 
     render() {
@@ -21,15 +21,23 @@ class MyLatestPosts extends Component {
                 {postsLoading && (<div>Loading</div>)}
                 {postsLoaded && posts.map(p => (
                     <Post key={p.id} {...p} />
-                ))}                
+                ))}
             </div>
         );
     }
 }
 
 function mapStateToProps(state) {
+    const {
+        myLatestPosts: { mapIds },
+        entities: { posts }
+    } = state;
+    const key = { filter: '', orderBy: 'latest' };
+    const x = mapIds[JSON.stringify(key)];
+    const p = x ? x.map(id => posts[id]) : [];
+
     return {
-        posts: getPosts(state),
+        posts: p, //getPosts(state)
         postsLoading: state.myLatestPosts.loading,
         postsLoaded: state.myLatestPosts.loaded
     };
