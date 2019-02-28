@@ -8,6 +8,10 @@ import schemas from 'utils/schemas'
 // const loadPostSucceeded = (posts) => ({ type: types.LOAD_POSTS_SUCCEEDED, payload: posts });
 // const loadPostFailed = () => ({ type: types.LOAD_POSTS_FAILED });
 
+export const loadPostsKey = (filter, orderBy) => {
+    return JSON.stringify({ filter, orderBy });
+}
+
 export const loadPosts = (filter, orderBy, page = 1, pageSize = 3) => {
     return async dispatch => {
         // const actions = bindActionCreators({ loadPostStarted, loadPostSucceeded, loadPostFailed }, dispatch);
@@ -27,7 +31,11 @@ export const loadPosts = (filter, orderBy, page = 1, pageSize = 3) => {
                 prom: prom,
                 promParams: { filter, orderBy, page, pageSize },
                 types: [types.LOAD_POSTS_STARTED, types.LOAD_POSTS_SUCCEEDED, types.LOAD_POSTS_FAILED],
-                schema: schemas.posts
+                schema: schemas.posts,
+                apiType: 'list',
+                mapIdsKey: loadPostsKey(filter, orderBy),
+                page,
+                pageSize
             }
         });
 

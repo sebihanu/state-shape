@@ -1,9 +1,14 @@
 import { createSelector } from 'reselect'
 
-const ids = state => state.myLatestPosts.ids
-const posts = state => state.entities.posts
+export const getPosts = (key, state) => {
 
-export const getPosts = createSelector(
-    [ids, posts],
-    (ids, posts) => ids.map(id => posts[id])
-);
+    const ids = state => (state.myLatestPosts.mapIds[key] ? state.myLatestPosts.mapIds[key].ids: [])
+    const posts = state => state.entities.posts
+
+    const selector = createSelector(
+        [ids, posts],
+        (ids, posts) => ids.map(id => posts[id])
+    )
+
+    return selector(state);
+};

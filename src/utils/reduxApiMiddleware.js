@@ -10,7 +10,7 @@ function createApiMiddleware(extraArgument) {
             return next(action)
         }
 
-        const { prom, promParams, types, schema } = callAPI;
+        const { prom, promParams, types, schema, apiType } = callAPI;
 
         if (!Array.isArray(types) || types.length !== 3) {
             throw new Error('Expected an array of three action types.')
@@ -39,7 +39,12 @@ function createApiMiddleware(extraArgument) {
                 const camelizedJson = camelizeKeys(response);
                 let payload = Object.assign({}, normalize(camelizedJson, schema));
 
-                return next(actionWith({ type: successType, params: promParams, ...payload }))
+                if (apiType === 'list') {
+                    const { mapIdsKey, page, pageSize } = callAPI;
+                    return next(actionWith({ type: successType, mapIdsKey, page, pageSize, ...payload }));
+                }
+
+                return next(actionWith({ type: successType, ...payload }))
             },
             error => next(actionWith({ type: failureType, error: error.message || 'Something bad happened' })));
     };

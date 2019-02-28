@@ -1,6 +1,6 @@
 import data from './db'
 
-const delay = 3000
+const delay = 2000
 const db = data(10, 30, 15);
 
 export class MockApi {

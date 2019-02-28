@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import MyBlogLatestComments from "./MyBlogLatestComments";
-import MyLatestPosts from "./MyLatestPosts";
+import MyLatestPostsWidget from "./MyLatestPostsWidget";
 import { Grid } from '@material-ui/core';
 
 class Dashboard extends Component {
@@ -11,7 +11,7 @@ class Dashboard extends Component {
                     <MyBlogLatestComments />
                 </Grid>
                 <Grid item>
-                    <MyLatestPosts />
+                    <MyLatestPostsWidget />
                 </Grid>
             </Grid>
         );

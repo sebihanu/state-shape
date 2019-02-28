@@ -1,5 +1,6 @@
 import * as types from 'actions/postTypes';
 import initialState from 'utils/initialState';
+import { union } from 'lodash';
 
 const reducer = (state = initialState.myLatestPosts, action) => {
     switch (action.type) {
@@ -11,17 +12,14 @@ const reducer = (state = initialState.myLatestPosts, action) => {
         }
 
         case types.LOAD_POSTS_SUCCEEDED: {
-            const { params } = action;
-            const { page, pageSize, ...rest } = params;
-
+            const { mapIdsKey, page, pageSize } = action;
             const mapIds = { ...state.mapIds };
-            mapIds[JSON.stringify(rest)] = { ids: action.result, page, pageSize };
+            const currentIds = mapIds[mapIdsKey] ? mapIds[mapIdsKey].ids : [];
+            mapIds[mapIdsKey] = { ...mapIds[mapIdsKey], ids: union(currentIds, action.result), page, pageSize };
 
             return {
                 ...state,
-                ids: state.ids.concat(action.result),
                 loading: false,
-                loaded: true,
                 mapIds: mapIds
             };
         }

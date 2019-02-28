@@ -4,11 +4,9 @@ const initialState = {
         users: {},
         comments: {}
     },
-    myLatestPosts: {
-        ids: [],
+    myLatestPosts: {        
         mapIds: {},
-        loading: false,
-        loaded: false
+        loading: false        
     }
 };
 
