@@ -37,6 +37,7 @@ class Header extends React.PureComponent {
                         React
                     </Typography>
                     <NavLink to="/" style={linkStyle}>Dashboard</NavLink>
+                    <NavLink to="/myblog" style={linkStyle}>My blog</NavLink>
                 </Toolbar>
             </AppBar>
         );

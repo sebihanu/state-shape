@@ -1,31 +1,23 @@
 import * as types from './postTypes';
 import { MockApi as api } from 'api/mockApi'
-// import { bindActionCreators } from 'redux';
 import { CALL_API } from 'utils/reduxApiMiddleware'
 import schemas from 'utils/schemas'
 
-// const loadPostStarted = () => ({ type: types.LOAD_POSTS_STARTED });
-// const loadPostSucceeded = (posts) => ({ type: types.LOAD_POSTS_SUCCEEDED, payload: posts });
-// const loadPostFailed = () => ({ type: types.LOAD_POSTS_FAILED });
-
-export const loadPostsKey = (filter, orderBy) => {
-    return JSON.stringify({ filter, orderBy });
+export const loadPostsKey = (filter, orderBy, pageSize) => {
+    return JSON.stringify({ filter, orderBy, pageSize });
 }
 
-export const loadPosts = (filter, orderBy, page = 1, pageSize = 3) => {
-    return async dispatch => {
-        // const actions = bindActionCreators({ loadPostStarted, loadPostSucceeded, loadPostFailed }, dispatch);
+export const loadPosts = (filter, orderBy, pageSize = 10, loadType = '') => { //loadType: '' as current, more, reload
+    return async (dispatch, getState) => {
+        const key = loadPostsKey(filter, orderBy, pageSize);
 
-        // actions.loadPostStarted();
-
-        // try {
-        //     const posts = await api.getPostsByBlog();
-        //     actions.loadPostSucceeded(posts);
-        // }
-        // catch{
-        //     actions.loadPostFailed();
-        // }        
-
+        const myPosts = getState().myPosts[key];
+        let shouldCallApi = !(myPosts && myPosts.page) || loadType === 'more';
+        if (!shouldCallApi) {
+            return;
+        }
+//TODO implement reload
+        const page = (myPosts && myPosts.page) ? (loadType === 'more' ? myPosts.page + 1 : myPosts.page) : 1;
         const loadPostsAction = (prom) => ({
             [CALL_API]: {
                 prom: prom,
@@ -33,7 +25,7 @@ export const loadPosts = (filter, orderBy, page = 1, pageSize = 3) => {
                 types: [types.LOAD_POSTS_STARTED, types.LOAD_POSTS_SUCCEEDED, types.LOAD_POSTS_FAILED],
                 schema: schemas.posts,
                 apiType: 'list',
-                key: loadPostsKey(filter, orderBy),
+                key: key,
                 page,
                 pageSize
             }

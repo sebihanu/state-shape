@@ -1,8 +1,9 @@
+
 import * as types from 'actions/postTypes';
 import initialState from 'utils/initialState';
 import { union } from 'lodash';
 
-const reducer = (state = initialState.myLatestPosts, action) => {
+const reducer = (state = initialState.myPosts, action) => {
     switch (action.type) {
         case types.LOAD_POSTS_STARTED: {
             const { key } = action;

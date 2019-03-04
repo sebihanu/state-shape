@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
 import { merge } from 'lodash'
-import myLatestPosts from './myLatestPosts'
+import myPosts from './myPosts'
 import initialState from 'utils/initialState';
 
 const entities = (state = initialState.entities, action) => {
@@ -13,5 +13,5 @@ const entities = (state = initialState.entities, action) => {
 
 export default combineReducers({
   entities,
-  myLatestPosts
+  myPosts
 })

@@ -1,47 +1,15 @@
-import React, { PureComponent } from "react";
-import { compose, bindActionCreators } from 'redux'
+import { compose } from 'redux'
 import { connect } from 'react-redux';
-import * as postActions from 'actions/posts';
-import { getPosts, getPostsLoading } from 'selectors/myLatestPosts'
-import MyLatestPostsComponent from 'components/Posts/MyLatestPosts'
+import { loadPosts } from 'actions/posts';
+import { getPosts, getPostsLoading } from 'selectors/myPosts'
+import MyLatestPosts from 'components/Posts/MyLatestPosts'
 
-class MyLatestPostsWidget extends PureComponent {
-    state = {
-        filter: '',
-        orderBy: 'latest',
-        page: 1,
-        pageSize: 4
-    }
-
-    componentDidMount() {
-        // const interval = setInterval(() => {
-        //     this.setState((prevState) => {
-        //         const page = prevState.page + 1;
-        //         return { page: page }
-        //     });
-        // }, 4000);
-        // setTimeout(() => {
-        //     clearInterval(interval);
-        // }, 3000);
-    }
-
-    loadMore = () => {
-        this.setState((prevState) => {
-            const page = prevState.page + 1;
-            return { page: page }
-        });
-    }
-
-    render() {
-        return (
-            <MyLatestPostsComponentConnected {...this.state} loadMore={this.loadMore} />
-        );
-    }
-}
+const filter = '';
+const orderBy = 'latest';
 
 function mapStateToProps(state, ownProps) {
-    const posts = getPosts(ownProps.filter, ownProps.orderBy, state);
-    const loading = getPostsLoading(ownProps.filter, ownProps.orderBy, state);
+    const posts = getPosts(filter, orderBy, ownProps.pageSize, state);
+    const loading = getPostsLoading(filter, orderBy, ownProps.pageSize, state);
     return {
         posts: posts,
         postsLoading: loading
@@ -50,9 +18,10 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        actions: bindActionCreators({ ...postActions }, dispatch)
+        actions: {
+            loadPosts: (pageSize, loadType) => dispatch(loadPosts(filter, orderBy, pageSize, loadType))
+        }
     };
 }
 
-const MyLatestPostsComponentConnected = compose(connect(mapStateToProps, mapDispatchToProps))(MyLatestPostsComponent);
-export default MyLatestPostsWidget;
+export default compose(connect(mapStateToProps, mapDispatchToProps))(MyLatestPosts);

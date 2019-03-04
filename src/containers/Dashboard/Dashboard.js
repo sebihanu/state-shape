@@ -11,7 +11,7 @@ class Dashboard extends Component {
                     <MyBlogLatestCommentsWidget />
                 </Grid>
                 <Grid item>
-                    <MyLatestPostsWidget />
+                    <MyLatestPostsWidget pageSize={4} />
                 </Grid>
             </Grid>
         );

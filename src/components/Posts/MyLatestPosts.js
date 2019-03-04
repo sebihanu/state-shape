@@ -1,24 +1,31 @@
-import React, { PureComponent } from "react";
+import React, {PureComponent } from "react";
+import PropTypes from 'prop-types';
 import { Button } from '@material-ui/core';
 import Post from './Post';
 
-export default class MyLatestPosts extends PureComponent {
-    componentDidMount() {
-        const { filter, orderBy, page, pageSize } = this.props;
-        this.props.actions.loadPosts(filter, orderBy, page, pageSize);
-    }
-    componentDidUpdate(prevProps) {
-        const { filter, orderBy, page, pageSize } = this.props;
-        if (prevProps.page !== this.props.page)
-            this.props.actions.loadPosts(filter, orderBy, page, pageSize);
+export default class MyLatestPosts extends PureComponent {        
+    componentDidMount() {        
+        this.props.actions.loadPosts(this.props.pageSize);
+        
+        // const interval = setInterval(() => {
+        //     this.setState((prevState) => {
+        //         this.props.actions.loadPosts(this.props.pageSize, 'more');
+        //     });
+        // }, 4000);
+        // setTimeout(() => {
+        //     clearInterval(interval);
+        // }, 3000);        
     }
 
-    render() {
-        const { postsLoading, loadMore } = { ...this.props };
-        const posts = this.props.posts;
+    loadMore = () => {
+        this.props.actions.loadPosts(this.props.pageSize, 'more');
+    }   
+
+    render() {        
+        const { posts, postsLoading } = { ...this.props };                
         return (
             <div>
-                <Button onClick={loadMore} disabled={postsLoading}>Load more...</Button>
+                <Button onClick={this.loadMore} disabled={postsLoading}>Load more...</Button>
                 {postsLoading && (<div>Loading</div>)}
                 {posts && posts.map(p => (
                     <Post key={p.id} {...p} />
@@ -27,3 +34,9 @@ export default class MyLatestPosts extends PureComponent {
         );
     }
 }
+
+MyLatestPosts.propTypes = {
+    pageSize: PropTypes.number.isRequired,
+    posts: PropTypes.array,
+    postsLoading: PropTypes.bool.isRequired
+};

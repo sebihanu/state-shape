@@ -4,7 +4,7 @@ const initialState = {
         users: {},
         comments: {}
     },
-    myLatestPosts: {}
+    myPosts: {}
 };
 
 export default initialState;

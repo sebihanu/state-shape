@@ -51,14 +51,14 @@ function createApiMiddleware(extraArgument) {
 
 const getRequestTypeData = (type, callAPI) => {
     const { apiType, key } = callAPI;
-    if (apiType == 'list')
+    if (apiType === 'list')
         return { type, key };
     return { type };
 }
 
 const getFailureTypeData = (type, callAPI, error) => {
     const { apiType, key } = callAPI;
-    if (apiType == 'list')
+    if (apiType === 'list')
         return { type, key, error };
     return { type, error };
 }
