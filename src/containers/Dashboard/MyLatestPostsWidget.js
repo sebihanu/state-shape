@@ -2,7 +2,7 @@ import React, { PureComponent } from "react";
 import { compose, bindActionCreators } from 'redux'
 import { connect } from 'react-redux';
 import * as postActions from 'actions/posts';
-import { getPosts } from 'selectors/myLatestPosts'
+import { getPosts, getPostsLoading } from 'selectors/myLatestPosts'
 import MyLatestPostsComponent from 'components/Posts/MyLatestPosts'
 
 class MyLatestPostsWidget extends PureComponent {
@@ -14,15 +14,15 @@ class MyLatestPostsWidget extends PureComponent {
     }
 
     componentDidMount() {
-        const interval = setInterval(() => {
-            this.setState((prevState) => {
-                const page = prevState.page + 1;
-                return { page: page }
-            });
-        }, 4000);
-        setTimeout(() => {
-            clearInterval(interval);
-        }, 3000);
+        // const interval = setInterval(() => {
+        //     this.setState((prevState) => {
+        //         const page = prevState.page + 1;
+        //         return { page: page }
+        //     });
+        // }, 4000);
+        // setTimeout(() => {
+        //     clearInterval(interval);
+        // }, 3000);
     }
 
     loadMore = () => {
@@ -40,12 +40,11 @@ class MyLatestPostsWidget extends PureComponent {
 }
 
 function mapStateToProps(state, ownProps) {
-
-    const key = postActions.loadPostsKey(ownProps.filter, ownProps.orderBy);
-    const posts = getPosts(key, state);
+    const posts = getPosts(ownProps.filter, ownProps.orderBy, state);
+    const loading = getPostsLoading(ownProps.filter, ownProps.orderBy, state);
     return {
         posts: posts,
-        postsLoading: state.myLatestPosts.loading
+        postsLoading: loading
     };
 }
 

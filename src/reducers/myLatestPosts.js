@@ -5,30 +5,27 @@ import { union } from 'lodash';
 const reducer = (state = initialState.myLatestPosts, action) => {
     switch (action.type) {
         case types.LOAD_POSTS_STARTED: {
-            return {
-                ...state,
-                loading: true
-            }
+            const { key } = action;
+            let result = { ...state };
+            result[key] = { ...state[key], loading: true };
+            return result;
         }
 
         case types.LOAD_POSTS_SUCCEEDED: {
-            const { mapIdsKey, page, pageSize } = action;
-            const mapIds = { ...state.mapIds };
-            const currentIds = mapIds[mapIdsKey] ? mapIds[mapIdsKey].ids : [];
-            mapIds[mapIdsKey] = { ...mapIds[mapIdsKey], ids: union(currentIds, action.result), page, pageSize };
+            const { key, page, pageSize } = action;
 
-            return {
-                ...state,
-                loading: false,
-                mapIds: mapIds
-            };
+            const currentIds = state[key] ? state[key].ids : [];
+            let result = { ...state };
+            result[key] = { ...state[key], ids: union(currentIds, action.result), page, pageSize, loading: false };            
+
+            return result;
         }
 
         case types.LOAD_POSTS_FAILED: {
-            return {
-                ...state,
-                loading: false
-            }
+            const { key } = action;
+            let result = { ...state };
+            result[key] = { ...state[key], loading: false };
+            return result;
         }
 
         default:

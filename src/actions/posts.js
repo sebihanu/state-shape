@@ -33,7 +33,7 @@ export const loadPosts = (filter, orderBy, page = 1, pageSize = 3) => {
                 types: [types.LOAD_POSTS_STARTED, types.LOAD_POSTS_SUCCEEDED, types.LOAD_POSTS_FAILED],
                 schema: schemas.posts,
                 apiType: 'list',
-                mapIdsKey: loadPostsKey(filter, orderBy),
+                key: loadPostsKey(filter, orderBy),
                 page,
                 pageSize
             }

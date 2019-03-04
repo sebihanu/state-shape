@@ -4,10 +4,7 @@ const initialState = {
         users: {},
         comments: {}
     },
-    myLatestPosts: {        
-        mapIds: {},
-        loading: false        
-    }
+    myLatestPosts: {}
 };
 
 export default initialState;

@@ -10,7 +10,7 @@ function createApiMiddleware(extraArgument) {
             return next(action)
         }
 
-        const { prom, promParams, types, schema, apiType } = callAPI;
+        const { prom, promParams, types, schema, apiType, key } = callAPI;
 
         if (!Array.isArray(types) || types.length !== 3) {
             throw new Error('Expected an array of three action types.')
@@ -24,6 +24,10 @@ function createApiMiddleware(extraArgument) {
             throw new Error('Specify one of the exported Schemas.');
         }
 
+        if (apiType === 'list' && !key) {
+            throw new Error('Expected key parameter for list api call type.');
+        }
+
         const actionWith = data => {
             const finalAction = Object.assign({}, action, data)
             delete finalAction[CALL_API]
@@ -31,7 +35,7 @@ function createApiMiddleware(extraArgument) {
         }
 
         const [requestType, successType, failureType] = types
-        next(actionWith({ type: requestType }))
+        next(actionWith(getRequestTypeData(requestType, callAPI)));
 
         prom(...Object.values(promParams)).then(
             response => {
@@ -39,15 +43,33 @@ function createApiMiddleware(extraArgument) {
                 const camelizedJson = camelizeKeys(response);
                 let payload = Object.assign({}, normalize(camelizedJson, schema));
 
-                if (apiType === 'list') {
-                    const { mapIdsKey, page, pageSize } = callAPI;
-                    return next(actionWith({ type: successType, mapIdsKey, page, pageSize, ...payload }));
-                }
-
-                return next(actionWith({ type: successType, ...payload }))
+                return next(actionWith(getSuccessTypeData(successType, callAPI, payload)))
             },
-            error => next(actionWith({ type: failureType, error: error.message || 'Something bad happened' })));
+            error => next(actionWith(getFailureTypeData(failureType, callAPI, error.message || 'Something bad happened'))));
     };
+}
+
+const getRequestTypeData = (type, callAPI) => {
+    const { apiType, key } = callAPI;
+    if (apiType == 'list')
+        return { type, key };
+    return { type };
+}
+
+const getFailureTypeData = (type, callAPI, error) => {
+    const { apiType, key } = callAPI;
+    if (apiType == 'list')
+        return { type, key, error };
+    return { type, error };
+}
+
+const getSuccessTypeData = (type, callAPI, payload) => {
+    const { apiType } = callAPI;
+    if (apiType === 'list') {
+        const { key, page, pageSize } = callAPI;
+        return { type, key, page, pageSize, ...payload };
+    }
+    return { type, ...payload };
 }
 
 const api = createApiMiddleware();
