@@ -23,6 +23,8 @@ export class MockApi {
         const ordered = filtered.sort((a, b) => {
             if (orderBy === 'latest') {
                 return b.updated - a.updated;
+            } else if (orderBy === 'oldest') {
+                return a.updated - b.updated;
             }
 
             return a.id - b.id;

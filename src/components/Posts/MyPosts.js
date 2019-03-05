@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import { Button, TextField } from '@material-ui/core';
+import { Button, TextField, RadioGroup, Radio, FormControlLabel } from '@material-ui/core';
 import Post from './Post';
 
 export default class MyPosts extends PureComponent {
@@ -24,6 +24,10 @@ export default class MyPosts extends PureComponent {
         return (
             <div>
                 <TextField label="Filter" value={editFilters.filter} onChange={onPropertyChange('filter')} />
+                <RadioGroup name="orderBy" value={editFilters.orderBy} onChange={onPropertyChange('orderBy')}>
+                    <FormControlLabel value="latest" control={<Radio />} label="Latest" />
+                    <FormControlLabel value="oldest" control={<Radio />} label="Oldest" />
+                </RadioGroup>
                 <Button onClick={search} disabled={postsLoading}>Search</Button>
                 <Button onClick={this.loadMore} disabled={postsLoading}>Load more...</Button>
                 {postsLoading && (<div>Loading</div>)}
