@@ -7,28 +7,45 @@ import MyPostsComponent from 'components/Posts/MyPosts'
 
 class MyPostsWidget extends PureComponent {
     state = {
-        filters: {
-            filter: ''
+        editFilters: {
+            filter: '',
+            orderBy: 'latest'
         },
-        orderBy: 'latest'
+        itemsFilters: {
+            filter: '',
+            orderBy: 'latest'
+        }
     }
 
-    handlePropertyChange = prop => value => {
-        this.setState({
-            filters: { [prop]: value }
+    handlePropertyChange = prop => ev => {
+        const val = ev.target.value;
+        this.setState(prevState => ({
+            editFilters: { ...prevState.editFilters, [prop]: val }
+        }));
+    }
+
+    handleSearch = () => {
+        this.setState(prevState => {            
+            return {
+                itemsFilters: { filter: prevState.editFilters.filter, orderBy: prevState.editFilters.orderBy }
+            }
         });
     }
 
     render() {
         return (
-            <MyPostsComponentConnected onPropertyChange={this.handlePropertyChange} {...this.state} pageSize={this.props.pageSize} />
+            <MyPostsComponentConnected
+                onPropertyChange={this.handlePropertyChange}
+                search={this.handleSearch}
+                {...this.state}
+                pageSize={this.props.pageSize} />
         );
     }
 }
 
 function mapStateToProps(state, ownProps) {
-    const posts = getPosts(ownProps.filters.filter, ownProps.orderBy, ownProps.pageSize, state);
-    const loading = getPostsLoading(ownProps.filter, ownProps.orderBy, ownProps.pageSize, state);
+    const posts = getPosts(ownProps.itemsFilters.filter, ownProps.itemsFilters.orderBy, ownProps.pageSize, state);
+    const loading = getPostsLoading(ownProps.itemsFilters.filter, ownProps.itemsFilters.orderBy, ownProps.pageSize, state);
     return {
         posts: posts,
         postsLoading: loading
