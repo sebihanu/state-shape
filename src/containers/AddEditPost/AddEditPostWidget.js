@@ -11,7 +11,7 @@ const getPostId = props => {
 }
 class AddEditPostWidget extends PureComponent {
     state = {
-
+        post: null
     }
 
     isNew() {
@@ -25,16 +25,36 @@ class AddEditPostWidget extends PureComponent {
         }
     }
 
+    static getDerivedStateFromProps(props, state) {
+        if (props.post && !state.post) {
+            return {
+                post: { ...props.post }
+            }
+        }
+
+        return null;
+    }
+
+    handlePropertyChange = prop => ev => {
+        const val = ev.target.value;
+        this.setState(prevState => ({ post: { ...prevState.post, [prop]: val } }));
+    }
+
+    handleSave = () => {
+        alert('saved');
+    }
+
     render() {
-        const { postLoading, postLoaded, post } = this.props;
+        const { postLoading, postLoaded } = this.props;
+        const { post } = this.state;
         return (
             <div>
                 <div>{this.isNew() ? "new" : "edit"} - {getPostId(this.props)}</div>
-                {postLoading && 
+                {postLoading &&
                     <div>Loading</div>
                 }
                 {postLoaded &&
-                    <EditPost {...post} />
+                    <EditPost {...post} onPropertyChange={this.handlePropertyChange} onSave={this.handleSave} />
                 }
             </div>
         );
