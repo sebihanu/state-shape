@@ -1,13 +1,13 @@
 import data from './db'
 
 const delay = 2000
-const db = data(10, 30, 15);
+const db = data(5, 10, 8);
 
 export class MockApi {
     static get = (result) => {
         return new Promise((resolve) => {
             setTimeout(() => {
-                resolve(Object.assign([], result));
+                resolve(Object.assign({}, result));
             }, delay);
         });
     }
@@ -18,8 +18,9 @@ export class MockApi {
         return this.get(db.subCategories.filter(a => a.categoryId === categoryId));
     };
 
-    static getPostsByBlog(filter, orderBy, page, pageSize) {        
-        const filtered = db.posts.filter(p => p.name.includes(filter) || p.content.includes(filter));
+    static getPostsByBlog(filter, blogId, orderBy, page, pageSize) {
+        const filtered = db.posts.filter(p => ((p.blogId === blogId)
+            && (p.name.includes(filter) || p.content.includes(filter))));
         const ordered = filtered.sort((a, b) => {
             if (orderBy === 'latest') {
                 return b.updated - a.updated;
@@ -38,6 +39,30 @@ export class MockApi {
 
             return { ...p, labels: postLabels, comments: postComments };
         });
+        return MockApi.get(result);
+    }
+
+    static getBlogByOwner(ownerId) {
+        const blog = db.blogs.find(b => b.ownerId === ownerId);
+        const owner = db.users.find(u => u.id === ownerId);
+        const subCategory = db.subCategories.find(s => s.id === blog.subCategoryId);
+        const category = db.categories.find(c => c.id === subCategory.id);
+        let result = {
+            ...blog,
+            owner: {
+                id: owner.id,
+                name: owner.name
+            },
+            subCategory: {
+                id: subCategory.id,
+                name: subCategory.name,
+                category: { ...category }
+            }
+        };
+
+        delete result.ownerId;
+        delete result.subCategoryId;
+
         return MockApi.get(result);
     }
 

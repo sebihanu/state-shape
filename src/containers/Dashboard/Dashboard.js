@@ -8,7 +8,7 @@ class Dashboard extends Component {
         return (
             <Grid container spacing={24}>
                 <Grid item>
-                    <MyBlogLatestCommentsWidget />
+                    <MyBlogLatestCommentsWidget pageSize={4} />
                 </Grid>
                 <Grid item>
                     <MyLatestPostsWidget pageSize={4} />

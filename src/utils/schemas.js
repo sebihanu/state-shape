@@ -2,10 +2,16 @@ import { schema } from 'normalizr'
 
 const userSchema = new schema.Entity('users');
 const labelSchema = new schema.Entity('labels');
+const categorySchema = new schema.Entity('categories');
 
-// const blogSchema = new schema.Entity('blogs', {
-//     owner: userSchema
-// }, { idAttribute: blog => blog.id });
+const subCategorySchema = new schema.Entity('subCategories', {
+    category: categorySchema
+}, { idAttribute: subCategory => subCategory.id });
+
+const blogSchema = new schema.Entity('blogs', {
+    owner: userSchema,
+    subCategory: subCategorySchema,
+}, { idAttribute: blog => blog.id });
 
 const commentSchema = new schema.Entity('comments', {
     user: userSchema,
@@ -17,5 +23,6 @@ const postSchema = new schema.Entity('posts', {
 }, { idAttribute: post => post.id });
 
 export default {
-    posts: [postSchema]
+    posts: [postSchema],
+    blog: blogSchema
 }

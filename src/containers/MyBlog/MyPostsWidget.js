@@ -2,7 +2,7 @@ import React, { PureComponent } from "react";
 import { compose, bindActionCreators } from 'redux'
 import { connect } from 'react-redux';
 import { loadPosts } from 'actions/posts';
-import { getPosts, getPostsLoading } from 'selectors/myPosts'
+import { getPosts, getPostsLoading } from 'selectors/posts'
 import MyPostsComponent from 'components/Posts/MyPosts'
 
 class MyPostsWidget extends PureComponent {

@@ -5,7 +5,7 @@ import Post from './Post';
 
 export default class MyLatestPosts extends PureComponent {        
     componentDidMount() {        
-        this.props.actions.loadPosts(this.props.pageSize);
+        this.props.actions.loadPosts(this.props.pageSize, this.props.blogId);
         
         // const interval = setInterval(() => {
         //     this.setState((prevState) => {
@@ -18,7 +18,7 @@ export default class MyLatestPosts extends PureComponent {
     }
 
     loadMore = () => {
-        this.props.actions.loadPosts(this.props.pageSize, 'more');
+        this.props.actions.loadPosts(this.props.pageSize, this.props.blogId, 'more');
     }   
 
     render() {        

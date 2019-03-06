@@ -1,25 +1,27 @@
 import { compose } from 'redux'
 import { connect } from 'react-redux';
 import { loadPosts } from 'actions/posts';
-import { getPosts, getPostsLoading } from 'selectors/myPosts'
+import { getPosts, getPostsLoading } from 'selectors/posts'
 import MyLatestPosts from 'components/Posts/MyLatestPosts'
 
 const filter = '';
 const orderBy = 'latest';
 
 function mapStateToProps(state, ownProps) {
-    const posts = getPosts(filter, orderBy, ownProps.pageSize, state);
-    const loading = getPostsLoading(filter, orderBy, ownProps.pageSize, state);
+    const blogId = state.currentUser.blogId;
+    const posts = getPosts(filter, blogId, orderBy, ownProps.pageSize, state);
+    const loading = getPostsLoading(filter, blogId, orderBy, ownProps.pageSize, state);    
     return {
         posts: posts,
-        postsLoading: loading
+        postsLoading: loading,
+        blogId: blogId
     };
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch) {    
     return {
         actions: {
-            loadPosts: (pageSize, loadType) => dispatch(loadPosts(filter, orderBy, pageSize, loadType))
+            loadPosts: (pageSize, blogId, loadType) => dispatch(loadPosts(filter, blogId, orderBy, pageSize, loadType))
         }
     };
 }

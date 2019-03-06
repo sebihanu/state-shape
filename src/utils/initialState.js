@@ -4,7 +4,13 @@ const initialState = {
         users: {},
         comments: {}
     },
-    myPosts: {}
+    currentUser: {
+        id: 1,
+        blogId: null,
+        blogLoading: false,
+        blogLoaded: false
+    },
+    posts: {}    
 };
 
 export default initialState;
