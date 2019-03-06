@@ -1,5 +1,6 @@
 import React, { PureComponent } from "react";
-import { Button, TextField, RadioGroup, Radio, FormControlLabel } from '@material-ui/core';
+import { Button, TextField, RadioGroup, Radio, FormControlLabel, Grid } from '@material-ui/core';
+import { Link } from 'react-router-dom'
 import Post from './Post';
 
 export default class MyPosts extends PureComponent {
@@ -20,7 +21,9 @@ export default class MyPosts extends PureComponent {
     }
 
     render() {
-        const { posts, postsLoading, onPropertyChange, editFilters, search } = { ...this.props };            
+        const { posts, postsLoading, onPropertyChange, editFilters, search } = { ...this.props };
+        const getEditPostRoute = id => `/posts/${id}`;
+        const EditPostLink = id => props => <Link to={getEditPostRoute(id)} {...props} />
         return (
             <div>
                 <TextField label="Filter" value={editFilters.filter} onChange={onPropertyChange('filter')} />
@@ -32,7 +35,14 @@ export default class MyPosts extends PureComponent {
                 <Button onClick={this.loadMore} disabled={postsLoading}>Load more...</Button>
                 {postsLoading && (<div>Loading</div>)}
                 {posts && posts.map(p => (
-                    <Post key={p.id} {...p} />
+                    <Grid container key={p.id}>
+                        <Grid item>
+                            <Button component={EditPostLink(p.id)}>Edit</Button>
+                        </Grid>
+                        <Grid item>
+                            <Post {...p} />
+                        </Grid>
+                    </Grid>
                 ))}
             </div>
         );

@@ -1,4 +1,3 @@
-import { createSelector } from 'reselect'
 import createCachedSelector from 're-reselect'
 import * as commentActions from 'actions/comments';
 
