@@ -67,7 +67,7 @@ export class MockApi {
     }
 
     static getCommentsByBlog(blogId, page, pageSize) {
-        const filtered = db.comments.filter(c => c.blogId === blogId);        
+        const filtered = db.comments.filter(c => c.blogId === blogId);
         const ordered = filtered.sort((a, b) => {
             return b.created - a.created;
         });
@@ -75,10 +75,17 @@ export class MockApi {
         const paged = ordered.slice((page - 1) * pageSize, page * pageSize);
 
         let result = paged.map(c => {
-            
 
-            return { ...c};
+
+            return { ...c };
         });
+        return MockApi.get(result);
+    }
+
+    static getPost(postId) {
+        let post = db.posts.find(p => p.id === postId);
+        const postLabels = (post.labels || []).map(id => db.labels.find(x => x.id === id));
+        const result = { ...post, labels: postLabels };
         return MockApi.get(result);
     }
 

@@ -36,7 +36,7 @@ function createApiMiddleware(extraArgument) {
 
         const [requestType, successType, failureType] = types
         next(actionWith(getRequestTypeData(requestType, callAPI)));
-
+        
         prom(...Object.values(promParams)).then(
             response => {
                 //const json = JSON.stringify(response);
@@ -53,23 +53,23 @@ const getRequestTypeData = (type, callAPI) => {
     const { apiType, key } = callAPI;
     if (apiType === 'list')
         return { type, key };
-    return { type };
+    return { type, key };
 }
 
 const getFailureTypeData = (type, callAPI, error) => {
     const { apiType, key } = callAPI;
     if (apiType === 'list')
         return { type, key, error };
-    return { type, error };
+    return { type, key, error };
 }
 
 const getSuccessTypeData = (type, callAPI, payload) => {
-    const { apiType } = callAPI;
+    const { apiType, key } = callAPI;
     if (apiType === 'list') {
-        const { key, page, pageSize } = callAPI;
+        const { page, pageSize } = callAPI;
         return { type, key, page, pageSize, ...payload };
     }
-    return { type, ...payload };
+    return { type, key, ...payload };
 }
 
 const api = createApiMiddleware();

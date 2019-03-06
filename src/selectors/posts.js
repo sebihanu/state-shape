@@ -20,3 +20,14 @@ export const getPostsLoading = (filter, blogId, orderBy, pageSize, state) => {
     const loading = state.posts[key] ? state.posts[key].loading : false
     return loading;
 };
+
+export const getPost = (postId, state) => {
+    const editPost = state.editPosts[postId];
+    if (editPost && editPost.loaded)
+    {
+        const post = state.entities.posts[postId];
+        return post;
+    }    
+
+    return null;
+}

@@ -25,5 +25,6 @@ const postSchema = new schema.Entity('posts', {
 export default {
     posts: [postSchema],
     comments: [commentSchema],
-    blog: blogSchema
+    blog: blogSchema,
+    post: postSchema
 }

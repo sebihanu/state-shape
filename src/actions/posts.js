@@ -34,3 +34,25 @@ export const loadPosts = (filter, blogId, orderBy, pageSize = 10, loadType = '')
         dispatch(loadPostsAction(api.getPostsByBlog));
     }
 }
+
+export const getPost = (postId) => {
+    return async (dispatch, getState) => {
+        const post = getState().editPosts[postId];
+        let shouldCallApi = !(post && post.loaded);
+        if (!shouldCallApi) {
+            return;
+        }
+
+        const action = (prom) => ({
+            [CALL_API]: {
+                prom: prom,
+                promParams: { postId },
+                types: [types.LOAD_POST_STARTED, types.LOAD_POST_SUCCEEDED, types.LOAD_POST_FAILED],
+                schema: schemas.post,
+                key: postId
+            }
+        });
+
+        dispatch(action(api.getPost));
+    }
+}
