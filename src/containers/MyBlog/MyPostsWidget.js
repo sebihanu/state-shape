@@ -44,11 +44,13 @@ class MyPostsWidget extends PureComponent {
 }
 
 function mapStateToProps(state, ownProps) {
-    const posts = getPosts(ownProps.itemsFilters.filter, ownProps.itemsFilters.orderBy, ownProps.pageSize, state);
-    const loading = getPostsLoading(ownProps.itemsFilters.filter, ownProps.itemsFilters.orderBy, ownProps.pageSize, state);
+    const blogId = state.currentUser.blogId;
+    const posts = getPosts(ownProps.itemsFilters.filter, blogId, ownProps.itemsFilters.orderBy, ownProps.pageSize, state);
+    const loading = getPostsLoading(ownProps.itemsFilters.filter, blogId, ownProps.itemsFilters.orderBy, ownProps.pageSize, state);
     return {
         posts: posts,
-        postsLoading: loading
+        postsLoading: loading,
+        blogId: blogId
     };
 }
 

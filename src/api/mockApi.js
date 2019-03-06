@@ -66,6 +66,22 @@ export class MockApi {
         return MockApi.get(result);
     }
 
+    static getCommentsByBlog(blogId, page, pageSize) {
+        const filtered = db.comments.filter(c => c.blogId === blogId);        
+        const ordered = filtered.sort((a, b) => {
+            return b.created - a.created;
+        });
+
+        const paged = ordered.slice((page - 1) * pageSize, page * pageSize);
+
+        let result = paged.map(c => {
+            
+
+            return { ...c};
+        });
+        return MockApi.get(result);
+    }
+
     //UC0: getUsers; getCategories; getSubCategoriesByCategory; getLabels
     //UC0': getUsersByName; getCategoriesByName; getSubCategoriesByCategoryAndName; getLabelsByName
 

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import MyBlogLatestCommentsWidget from "./MyBlogLatestCommentsWidget";
+import MyBlogCommentsWidget from "./MyBlogCommentsWidget";
 import MyLatestPostsWidget from "./MyLatestPostsWidget";
 import { Grid } from '@material-ui/core';
 
@@ -8,7 +8,7 @@ class Dashboard extends Component {
         return (
             <Grid container spacing={24}>
                 <Grid item>
-                    <MyBlogLatestCommentsWidget pageSize={4} />
+                    <MyBlogCommentsWidget pageSize={4} />
                 </Grid>
                 <Grid item>
                     <MyLatestPostsWidget pageSize={4} />

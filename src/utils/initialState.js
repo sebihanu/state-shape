@@ -10,7 +10,8 @@ const initialState = {
         blogLoading: false,
         blogLoaded: false
     },
-    posts: {}    
+    posts: {},
+    blogComments: {}
 };
 
 export default initialState;

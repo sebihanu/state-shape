@@ -4,19 +4,19 @@ import Post from './Post';
 
 export default class MyPosts extends PureComponent {
     componentDidMount() {
-        const { itemsFilters, pageSize } = this.props;
-        this.props.actions.loadPosts(itemsFilters.filter, itemsFilters.orderBy, pageSize);
+        const { itemsFilters, pageSize, blogId } = this.props;
+        this.props.actions.loadPosts(itemsFilters.filter, blogId, itemsFilters.orderBy, pageSize);
     }
 
     componentDidUpdate(prevProps) {
-        const { itemsFilters, pageSize } = this.props;
+        const { itemsFilters, pageSize, blogId } = this.props;
         if (prevProps.itemsFilters !== this.props.itemsFilters)
-            this.props.actions.loadPosts(itemsFilters.filter, itemsFilters.orderBy, pageSize);
+            this.props.actions.loadPosts(itemsFilters.filter, blogId, itemsFilters.orderBy, pageSize);
     }
 
     loadMore = () => {
-        const { itemsFilters, pageSize } = this.props;
-        this.props.actions.loadPosts(itemsFilters.filter, itemsFilters.orderBy, pageSize, 'more');
+        const { itemsFilters, pageSize, blogId } = this.props;
+        this.props.actions.loadPosts(itemsFilters.filter, blogId, itemsFilters.orderBy, pageSize, 'more');
     }
 
     render() {

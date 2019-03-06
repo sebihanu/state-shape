@@ -49,7 +49,8 @@ const db = (blogsCount = 10, postsCount = 10, commentsCount = 10) => {
 
             for (let k = 1; k <= commentsCount; k++) {
                 const commentId = (i - 1) * postsCount * commentsCount + (j - 1) * commentsCount + k;
-                const comment = { id: commentId, content: `Comment-${i}-${j}-${k}`, postId: post.id, userId: users[k % users.length].id, created: '2019-01-31T00:00:00.000Z' }
+                const comment = { id: commentId, content: `Comment-${i}-${j}-${k}`, postId: post.id, 
+                userId: users[k % users.length].id, created: new Date(2019, i % 11, j % 25), blogId: blog.id }
 
                 commentsResult.push(comment);
             }
