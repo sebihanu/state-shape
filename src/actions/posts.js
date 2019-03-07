@@ -38,7 +38,7 @@ export const loadPosts = (filter, blogId, orderBy, pageSize = 10, loadType = '')
 export const getPost = (postId, reload = false) => {
     return async (dispatch, getState) => {
         const post = getState().editPosts[postId];
-        let shouldCallApi = reload || !(post && post.loaded);
+        let shouldCallApi = reload || !(post && post.loaded && !post.loading);
         if (!shouldCallApi) {
             return;
         }

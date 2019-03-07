@@ -12,8 +12,7 @@ const initialState = {
     },
     posts: {},
     blogComments: {},
-    editPosts: {},
-    updatedPosts: {}
+    editPosts: {}
 };
 
 export default initialState;
