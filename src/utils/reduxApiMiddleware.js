@@ -20,7 +20,7 @@ function createApiMiddleware(extraArgument) {
             throw new Error('Expected action types to be strings.')
         }
 
-        if (!schema) {
+        if (!schema && apiType !== 'command') {
             throw new Error('Specify one of the exported Schemas.');
         }
 
@@ -36,13 +36,23 @@ function createApiMiddleware(extraArgument) {
 
         const [requestType, successType, failureType] = types
         next(actionWith(getRequestTypeData(requestType, callAPI)));
-        
+
         prom(...Object.values(promParams)).then(
             response => {
-                //const json = JSON.stringify(response);
+                //const json = JSON.stringify(response);                                
+                if (apiType === 'command') {
+                    next(actionWith(getSuccessTypeData(successType, callAPI, promParams)));
+                    const { commandCallback } = callAPI;
+                    if (commandCallback){                        
+                        dispatch(commandCallback());
+                    }
+                    
+                    return;
+                }
+
                 const camelizedJson = camelizeKeys(response);
                 let payload = Object.assign({}, normalize(camelizedJson, schema));
-
+                
                 return next(actionWith(getSuccessTypeData(successType, callAPI, payload)))
             },
             error => next(actionWith(getFailureTypeData(failureType, callAPI, error.message || 'Something bad happened'))));

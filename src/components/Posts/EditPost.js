@@ -3,7 +3,7 @@ import { Grid, TextField, Button } from '@material-ui/core';
 import PropTypes from 'prop-types';
 
 const post = (props) => {
-    const { onPropertyChange, onSave } = props;
+    const { onPropertyChange, onSave, saving } = props;
     return (
         <Grid container spacing={8}>
             <Grid item sm={6}>
@@ -25,7 +25,7 @@ const post = (props) => {
                 <TextField label="Content" value={props.content} onChange={onPropertyChange('content')} />
             </Grid>
             <Grid item sm={12}>
-                <Button onClick={onSave}>Save</Button>
+                <Button onClick={onSave} disabled={saving}>Save</Button>
             </Grid>
         </Grid>
     );

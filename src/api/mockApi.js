@@ -89,6 +89,14 @@ export class MockApi {
         return MockApi.get(result);
     }
 
+    static updatePost(post) {
+        const dbPost = db.posts.find(p => p.id === post.id);
+        dbPost.name = post.name;
+        dbPost.content = post.content;
+        return MockApi.get(null);
+    }
+
+
     //UC0: getUsers; getCategories; getSubCategoriesByCategory; getLabels
     //UC0': getUsersByName; getCategoriesByName; getSubCategoriesByCategoryAndName; getLabelsByName
 
