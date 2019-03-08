@@ -2,7 +2,7 @@
 import * as types from 'actions/commentTypes';
 import initialState from 'utils/initialState';
 
-const reducer = (state = initialState.blogComments, action) => {
+const reducer = (state = initialState.comments.blogComments, action) => {
     switch (action.type) {
         case types.LOAD_BLOGCOMMENTS_STARTED: {
             const { key, page } = action;

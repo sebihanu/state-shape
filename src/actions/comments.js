@@ -11,7 +11,7 @@ export const loadBlogComments = (blogId, page, pageSize = 10) => {
     return async (dispatch, getState) => {
         const key = loadBlogCommentsKey(blogId, pageSize);
 
-        const comments = getState().blogComments[key];
+        const comments = getState().comments.blogComments[key];
         let shouldCallApi = !(comments && comments[page] && !comments[page].loading);
         if (!shouldCallApi) {
             return;

@@ -1,4 +1,3 @@
-import React, { PureComponent } from 'react';
 import { compose } from 'redux'
 import { connect } from 'react-redux';
 import { loadBlogComments } from 'actions/comments';

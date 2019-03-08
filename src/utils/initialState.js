@@ -6,8 +6,10 @@ const initialState = {
         blogLoading: false,
         blogLoaded: false
     },
+    comments: {
+        blogComments: {}
+    },
     posts: {},
-    blogComments: {},
     editPosts: {},
     postComments: {},
     postReplies: {}

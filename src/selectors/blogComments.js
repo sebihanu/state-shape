@@ -4,11 +4,11 @@ import { union } from 'lodash';
 
 const ids = (blogId, pageSize, state) => {
     const key = commentActions.loadBlogCommentsKey(blogId, pageSize);
-    if (!state.blogComments[key]) {
+    if (!state.comments.blogComments[key]) {
         return [];
     }
 
-    const comments = state.blogComments[key];
+    const comments = state.comments.blogComments[key];
     const result = Object.values(comments).reduce((acc, val, index, array) => {
         return union(acc, val.ids ? val.ids : []);
     }, []);
@@ -27,16 +27,16 @@ export const getComments = createCachedSelector(
 
 export const getCommentsPageLoading = (blogId, page, pageSize, state) => {
     const key = commentActions.loadBlogCommentsKey(blogId, pageSize);
-    const loading = state.blogComments[key] && state.blogComments[key][page] ? state.blogComments[key][page].loading : false
+    const loading = state.comments.blogComments[key] && state.comments.blogComments[key][page] ? state.comments.blogComments[key][page].loading : false
     return loading;
 };
 
 export const getLastLoadedPage = (blogId, pageSize, state) => {
     const key = commentActions.loadBlogCommentsKey(blogId, pageSize);
-    if (!state.blogComments[key]) {
+    if (!state.comments.blogComments[key]) {
         return 0;
     }
-    const result = Object.entries(state.blogComments[key]).reduce((acc, [k, v]) => {
+    const result = Object.entries(state.comments.blogComments[key]).reduce((acc, [k, v]) => {
         return Math.max(acc, v.loading ? 0 : k);
     }, 0);
 

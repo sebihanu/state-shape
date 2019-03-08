@@ -16,11 +16,15 @@ const entities = (state = initialState.entities, action) => {
   return state;
 }
 
+const comments = combineReducers({
+  blogComments
+});
+
 export default combineReducers({
   entities,
+  comments,
   posts,
-  editPosts,  
-  blogComments,
+  editPosts,    
   postComments,
   postReplies,
   currentUser
