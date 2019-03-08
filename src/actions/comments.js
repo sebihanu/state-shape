@@ -7,17 +7,17 @@ export const loadBlogCommentsKey = (blogId, pageSize) => {
     return JSON.stringify({ blogId, pageSize });
 }
 
-export const loadBlogComments = (blogId, pageSize = 10, loadType = '') => { //loadType: '' as current, more, reload
+export const loadBlogComments = (blogId, page, pageSize = 10) => { 
     return async (dispatch, getState) => {
         const key = loadBlogCommentsKey(blogId, pageSize);
 
         const comments = getState().blogComments[key];
-        let shouldCallApi = !(comments && comments.page) || loadType === 'more';
+        let shouldCallApi = !(comments && comments[page] && !comments[page].loading);
         if (!shouldCallApi) {
             return;
         }
         //TODO implement reload
-        const page = (comments && comments.page) ? (loadType === 'more' ? comments.page + 1 : comments.page) : 1;
+        
         const loadCommentsAction = (prom) => ({
             [CALL_API]: {
                 prom: prom,

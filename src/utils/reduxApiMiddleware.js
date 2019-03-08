@@ -61,23 +61,29 @@ function createApiMiddleware(extraArgument) {
 
 const getRequestTypeData = (type, callAPI) => {
     const { apiType, key } = callAPI;
-    if (apiType === 'list')
-        return { type, key };
+    if (apiType === 'list'){
+        const { page } = callAPI;
+        return { type, key, page };
+    }
+
     return { type, key };
 }
 
 const getFailureTypeData = (type, callAPI, error) => {
     const { apiType, key } = callAPI;
-    if (apiType === 'list')
-        return { type, key, error };
+    if (apiType === 'list'){
+        const { page } = callAPI;
+        return { type, key, page, error };
+    }
+        
     return { type, key, error };
 }
 
 const getSuccessTypeData = (type, callAPI, payload) => {
     const { apiType, key } = callAPI;
     if (apiType === 'list') {
-        const { page, pageSize } = callAPI;
-        return { type, key, page, pageSize, ...payload };
+        const { page } = callAPI;
+        return { type, key, page, ...payload };
     }
     return { type, key, ...payload };
 }

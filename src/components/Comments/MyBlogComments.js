@@ -6,16 +6,16 @@ import Comment from './Comment';
 export default class MyBlogComments extends PureComponent {
     componentDidMount() {
         const { blogId, pageSize } = this.props;
-        this.props.actions.loadBlogComments(blogId, pageSize);
+        this.props.actions.loadBlogComments(blogId, 1, pageSize);
     }
 
-    loadMore = () => {
-        const { blogId, pageSize } = this.props;
-        this.props.actions.loadBlogComments(blogId, pageSize, 'more');
+    loadMore = () => {        
+        const { blogId, pageSize, lastLoadedPage } = this.props;
+        this.props.actions.loadBlogComments(blogId, lastLoadedPage + 1, pageSize);
     }
 
     render() {
-        const { comments, commentsLoading } = { ...this.props };        
+        const { comments, commentsLoading } = { ...this.props };
         return (
             <div>
                 <Button onClick={this.loadMore} disabled={commentsLoading}>Load more...</Button>
