@@ -43,7 +43,7 @@ export const loadPostComments = (postId, pageSize = 10, loadType = '') => { //lo
     return async (dispatch, getState) => {
         const key = loadPostCommentsKey(postId, pageSize);
 
-        const comments = getState().postComments[key];
+        const comments = getState().comments.postComments[key];
         let shouldCallApi = !(comments && comments.page) || loadType === 'more';
         if (!shouldCallApi) {
             return;

@@ -2,7 +2,7 @@
 import * as types from 'actions/commentTypes';
 import initialState from 'utils/initialState';
 
-const reducer = (state = initialState.postReplies, action) => {
+const reducer = (state = initialState.comments.postReplies, action) => {
     switch (action.type) {        
         case types.REPLY_POST_STARTED: {
             const { key } = action;

@@ -7,12 +7,14 @@ const initialState = {
         blogLoaded: false
     },
     comments: {
-        blogComments: {}
+        blogComments: {},
+        postComments: {},
+        postReplies: {}
     },
-    posts: {},
-    editPosts: {},
-    postComments: {},
-    postReplies: {}
+    posts: {
+        viewPosts: {},
+        editPosts: {}
+    }    
 };
 
 export default initialState;

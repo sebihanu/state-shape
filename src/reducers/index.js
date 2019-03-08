@@ -1,15 +1,15 @@
 import { combineReducers } from 'redux'
 import { merge } from 'lodash'
-import posts from './posts'
-import editPosts from './editPosts'
-import blogComments from './blogComments'
-import postComments from './postComments'
-import postReplies from './postReplies'
+import viewPosts from './posts/viewPosts'
+import editPosts from './posts/editPosts'
+import blogComments from './comments/blogComments'
+import postComments from './comments/postComments'
+import postReplies from './comments/postReplies'
 import currentUser from './currentUser'
 import initialState from 'utils/initialState';
 
 const entities = (state = initialState.entities, action) => {
-  if (action.entities) {    
+  if (action.entities) {
     return merge({}, state, action.entities);
   }
 
@@ -17,15 +17,19 @@ const entities = (state = initialState.entities, action) => {
 }
 
 const comments = combineReducers({
-  blogComments
+  blogComments,
+  postComments,
+  postReplies
+});
+
+const posts = combineReducers({
+  viewPosts,
+  editPosts
 });
 
 export default combineReducers({
   entities,
   comments,
   posts,
-  editPosts,    
-  postComments,
-  postReplies,
   currentUser
 })

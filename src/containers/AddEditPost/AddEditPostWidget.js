@@ -74,10 +74,10 @@ function mapStateToProps(state, ownProps) {
     const postId = getPostId(ownProps);
     return {
         post: getPostSelector(postId, state),
-        postLoaded: state.editPosts[postId] && state.editPosts[postId].loaded,
-        postLoading: state.editPosts[postId] && state.editPosts[postId].loading,
-        postSaving: state.editPosts[postId] && state.editPosts[postId].saving,
-        postSaved: state.editPosts[postId] && state.editPosts[postId].saved
+        postLoaded: state.posts.editPosts[postId] && state.posts.editPosts[postId].loaded,
+        postLoading: state.posts.editPosts[postId] && state.posts.editPosts[postId].loading,
+        postSaving: state.posts.editPosts[postId] && state.posts.editPosts[postId].saving,
+        postSaved: state.posts.editPosts[postId] && state.posts.editPosts[postId].saved
     };
 }
 

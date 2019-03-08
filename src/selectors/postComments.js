@@ -3,7 +3,7 @@ import * as commentActions from 'actions/comments';
 
 const ids = (postId, pageSize, state) => {
     const key = commentActions.loadPostCommentsKey(postId, pageSize);
-    return (state.postComments[key] && state.postComments[key].ids ? state.postComments[key].ids : []);    
+    return (state.comments.postComments[key] && state.comments.postComments[key].ids ? state.comments.postComments[key].ids : []);    
 }
 const comments = (postId, pageSize, state) => (state.entities.comments ? state.entities.comments : [])
 
@@ -17,6 +17,6 @@ export const getComments = createCachedSelector(
 
 export const getCommentsLoading = (postId, pageSize, state) => {
     const key = commentActions.loadPostCommentsKey(postId, pageSize);
-    const loading = state.postComments[key] ? state.postComments[key].loading : false
+    const loading = state.comments.postComments[key] ? state.comments.postComments[key].loading : false
     return loading;
 };

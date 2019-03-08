@@ -3,7 +3,7 @@ import * as types from 'actions/commentTypes';
 import initialState from 'utils/initialState';
 import { union } from 'lodash';
 
-const reducer = (state = initialState.postComments, action) => {
+const reducer = (state = initialState.comments.postComments, action) => {
     switch (action.type) {
         case types.LOAD_POSTCOMMENTS_STARTED: {
             const { key } = action;
@@ -13,11 +13,11 @@ const reducer = (state = initialState.postComments, action) => {
         }
 
         case types.LOAD_POSTCOMMENTS_SUCCEEDED: {
-            const { key, page, pageSize } = action;
+            const { key, page } = action;
 
             const currentIds = state[key] ? state[key].ids : [];
             let result = { ...state };
-            result[key] = { ...state[key], ids: union(currentIds, action.result), page, pageSize, loading: false };            
+            result[key] = { ...state[key], ids: union(currentIds, action.result), page, loading: false };            
 
             return result;
         }

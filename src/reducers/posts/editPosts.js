@@ -2,7 +2,7 @@
 import * as types from 'actions/postTypes';
 import initialState from 'utils/initialState';
 
-const reducer = (state = initialState.editPosts, action) => {
+const reducer = (state = initialState.posts.editPosts, action) => {
     switch (action.type) {
         case types.LOAD_POST_STARTED: {
             const { key } = action;
