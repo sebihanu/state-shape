@@ -3,6 +3,8 @@ import { merge } from 'lodash'
 import posts from './posts'
 import editPosts from './editPosts'
 import blogComments from './blogComments'
+import postComments from './postComments'
+import postReplies from './postReplies'
 import currentUser from './currentUser'
 import initialState from 'utils/initialState';
 
@@ -19,5 +21,7 @@ export default combineReducers({
   posts,
   editPosts,  
   blogComments,
+  postComments,
+  postReplies,
   currentUser
 })

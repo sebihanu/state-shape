@@ -1,9 +1,5 @@
 const initialState = {
-    entities: {
-        posts: {},
-        users: {},
-        comments: {}
-    },
+    entities: {},
     currentUser: {
         id: 1,
         blogId: null,
@@ -12,7 +8,9 @@ const initialState = {
     },
     posts: {},
     blogComments: {},
-    editPosts: {}
+    editPosts: {},
+    postComments: {},
+    postReplies: {}
 };
 
 export default initialState;

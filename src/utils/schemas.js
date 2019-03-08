@@ -18,8 +18,7 @@ const commentSchema = new schema.Entity('comments', {
 }, { idAttribute: comment => comment.id });
 
 const postSchema = new schema.Entity('posts', {
-    labels: [labelSchema],
-    comments: [commentSchema]
+    labels: [labelSchema],    
 }, { idAttribute: post => post.id });
 
 export default {

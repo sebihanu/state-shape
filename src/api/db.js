@@ -43,14 +43,14 @@ const db = (blogsCount = 10, postsCount = 10, commentsCount = 10) => {
             const postId = (i - 1) * postsCount + j;
             const post = {
                 id: postId, name: `Post-${i}-${j}`, blogId: blog.id, labels: [1, 2],
-                updated: new Date(2019, i % 11, j % 25), content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit'
+                updated: new Date(2018, i % 11, j % 25), content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit'
             }
             postsResult.push(post)
 
             for (let k = 1; k <= commentsCount; k++) {
                 const commentId = (i - 1) * postsCount * commentsCount + (j - 1) * commentsCount + k;
                 const comment = { id: commentId, content: `Comment-${i}-${j}-${k}`, postId: post.id, 
-                userId: users[k % users.length].id, created: new Date(2019, i % 11, j % 25), blogId: blog.id }
+                userId: users[k % users.length].id, created: new Date(2018, i % 11, j % 25), blogId: blog.id }
 
                 commentsResult.push(comment);
             }

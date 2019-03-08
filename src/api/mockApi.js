@@ -35,9 +35,8 @@ export class MockApi {
 
         let result = paged.map(p => {
             const postLabels = (p.labels || []).map(id => db.labels.find(x => x.id === id));
-            const postComments = db.comments.filter(c => c.postId === p.id);
 
-            return { ...p, labels: postLabels, comments: postComments };
+            return { ...p, labels: postLabels };
         });
         return MockApi.get(result);
     }
@@ -75,8 +74,6 @@ export class MockApi {
         const paged = ordered.slice((page - 1) * pageSize, page * pageSize);
 
         let result = paged.map(c => {
-
-
             return { ...c };
         });
         return MockApi.get(result);
@@ -96,6 +93,34 @@ export class MockApi {
         return MockApi.get(null);
     }
 
+    static getCommentsByPost(postId, page, pageSize) {
+        const filtered = db.comments.filter(c => c.postId === postId);
+        const ordered = filtered.sort((a, b) => {
+            return b.created - a.created;
+        });
+
+        const paged = ordered.slice((page - 1) * pageSize, page * pageSize);
+
+        let result = paged.map(c => {
+            return { ...c };
+        });
+        return MockApi.get(result);
+    }
+
+    static replyPost(postId, userId, comment) {        
+        const id = db.comments.length;
+        const blogId = db.posts.find(p => p.id === postId).blogId;
+        const created = new Date();
+        let newComment = {
+            id,
+            content: comment,
+            postId, userId,
+            created,
+            blogId
+        };
+        db.comments.push(newComment);        
+        return MockApi.get(null);
+    }
 
     //UC0: getUsers; getCategories; getSubCategoriesByCategory; getLabels
     //UC0': getUsersByName; getCategoriesByName; getSubCategoriesByCategoryAndName; getLabelsByName
