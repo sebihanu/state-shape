@@ -7,17 +7,17 @@ export const loadPostsKey = (filter, blogId, orderBy, pageSize) => {
     return JSON.stringify({ filter, blogId, orderBy, pageSize });
 }
 
-export const loadPosts = (filter, blogId, orderBy, pageSize = 10, loadType = '') => { //loadType: '' as current, more, reload
+export const loadPosts = (filter, blogId, orderBy, page, pageSize = 10) => { //loadType: '' as current, more, reload
     return async (dispatch, getState) => {
         const key = loadPostsKey(filter, blogId, orderBy, pageSize);
 
         const posts = getState().posts.viewPosts[key];
-        let shouldCallApi = !(posts && posts.page) || loadType === 'more';
+        let shouldCallApi = !(posts && posts[page] && !posts[page].loading);
         if (!shouldCallApi) {
             return;
         }
         //TODO implement reload
-        const page = (posts && posts.page) ? (loadType === 'more' ? posts.page + 1 : posts.page) : 1;
+        
         const loadPostsAction = (prom) => ({
             [CALL_API]: {
                 prom: prom,

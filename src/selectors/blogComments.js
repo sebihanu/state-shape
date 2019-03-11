@@ -4,11 +4,11 @@ import { union } from 'lodash';
 
 const ids = (blogId, page, pageSize, state) => {
     const key = commentActions.loadBlogCommentsKey(blogId, pageSize);
-    if (!state.comments.blogComments[key]) {
+    const comments = state.comments.blogComments[key];
+    if (!comments) {
         return [];
     }
-
-    const comments = state.comments.blogComments[key];
+    
     const result = Object.entries(comments).reduce((acc, [k, v]) => {        
         return union(acc, k <= page ? v.ids : []);
     }, []);

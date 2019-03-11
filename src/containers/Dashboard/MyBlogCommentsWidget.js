@@ -34,7 +34,7 @@ function mapStateToProps(state, ownProps) {
 function mapDispatchToProps(dispatch) {
     return {
         actions: {
-            loadBlogComments: (blogId, page, pageSize, loadType) => dispatch(loadBlogComments(blogId, page, pageSize, loadType))
+            loadBlogComments: (blogId, page, pageSize) => dispatch(loadBlogComments(blogId, page, pageSize))
         }
     };
 }

@@ -4,8 +4,9 @@ import { Button } from '@material-ui/core';
 import Post from './Post';
 
 export default class MyLatestPosts extends PureComponent {        
-    componentDidMount() {        
-        this.props.actions.loadPosts(this.props.pageSize, this.props.blogId);
+    componentDidMount() {   
+        const { blogId, page, pageSize } = this.props;     
+        this.props.actions.loadPosts(blogId, page, pageSize);
         
         // const interval = setInterval(() => {
         //     this.setState((prevState) => {
@@ -17,15 +18,18 @@ export default class MyLatestPosts extends PureComponent {
         // }, 3000);        
     }
 
-    loadMore = () => {
-        this.props.actions.loadPosts(this.props.pageSize, this.props.blogId, 'more');
-    }   
+    componentDidUpdate(prevProps) {
+        const { blogId, page, pageSize } = this.props;
+        if (prevProps.page !== page) {            
+            this.props.actions.loadPosts(blogId, page, pageSize);
+        }
+    }
 
     render() {        
-        const { posts, postsLoading } = { ...this.props };                
+        const { posts, postsLoading, loadMore } = { ...this.props };                
         return (
             <div>
-                <Button onClick={this.loadMore} disabled={postsLoading}>Load more...</Button>
+                <Button onClick={loadMore} disabled={postsLoading}>Load more...</Button>
                 {postsLoading && (<div>Loading</div>)}
                 {posts && posts.map(p => (
                     <Post key={p.id} {...p} />
