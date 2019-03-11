@@ -14,7 +14,8 @@ class MyPostsWidget extends PureComponent {
         itemsFilters: {
             filter: '',
             orderBy: 'latest'
-        }
+        },
+        page: 1
     }
 
     handlePropertyChange = prop => ev => {
@@ -25,11 +26,15 @@ class MyPostsWidget extends PureComponent {
     }
 
     handleSearch = () => {
-        this.setState(prevState => {            
+        this.setState(prevState => {
             return {
-                itemsFilters: { filter: prevState.editFilters.filter, orderBy: prevState.editFilters.orderBy }
+                itemsFilters: { filter: prevState.editFilters.filter, orderBy: prevState.editFilters.orderBy }, page: 1
             }
         });
+    }
+
+    loadMore = () => {
+        this.setState((prevState) => ({ page: prevState.page + 1 }));
     }
 
     render() {
@@ -38,15 +43,20 @@ class MyPostsWidget extends PureComponent {
                 onPropertyChange={this.handlePropertyChange}
                 search={this.handleSearch}
                 {...this.state}
-                pageSize={this.props.pageSize} />
+                {...this.props}
+                loadMore={this.loadMore} />
         );
     }
 }
 
 function mapStateToProps(state, ownProps) {
+    const { page, pageSize } = ownProps;
+    const { filter, orderBy } = ownProps.itemsFilters;
     const blogId = state.currentUser.blogId;
-    const posts = getPosts(ownProps.itemsFilters.filter, blogId, ownProps.itemsFilters.orderBy, ownProps.pageSize, state);
-    const loading = getPostsLoading(ownProps.itemsFilters.filter, blogId, ownProps.itemsFilters.orderBy, ownProps.pageSize, state);
+
+    const posts = getPosts(filter, blogId, orderBy, page, pageSize, state);
+    const loading = getPostsLoading(filter, blogId, orderBy, page, pageSize, state);
+
     return {
         posts: posts,
         postsLoading: loading,
