@@ -5,20 +5,22 @@ import Comment from './Comment';
 
 export default class MyBlogComments extends PureComponent {
     componentDidMount() {
-        const { blogId, pageSize } = this.props;
-        this.props.actions.loadBlogComments(blogId, 1, pageSize);
+        const { blogId, page, pageSize } = this.props;
+        this.props.actions.loadBlogComments(blogId, page, pageSize);
     }
 
-    loadMore = () => {        
-        const { blogId, pageSize, lastLoadedPage } = this.props;
-        this.props.actions.loadBlogComments(blogId, lastLoadedPage + 1, pageSize);
+    componentDidUpdate(prevProps) {
+        const { blogId, page, pageSize } = this.props;
+        if (prevProps.page !== page) {            
+            this.props.actions.loadBlogComments(blogId, page, pageSize);
+        }
     }
 
     render() {
-        const { comments, commentsLoading } = { ...this.props };
+        const { comments, commentsLoading, loadMore } = { ...this.props };
         return (
             <div>
-                <Button onClick={this.loadMore} disabled={commentsLoading}>Load more...</Button>
+                <Button onClick={loadMore} disabled={commentsLoading}>Load more...</Button>
                 {commentsLoading && (<div>Loading</div>)}
                 {comments && comments.map(c => (
                     <Comment key={c.id} {...c} />
