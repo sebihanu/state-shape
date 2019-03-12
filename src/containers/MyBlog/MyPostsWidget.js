@@ -6,52 +6,65 @@ import { getPosts, getPostsLoading } from 'selectors/posts'
 import MyPostsComponent from 'components/Posts/MyPosts'
 
 class MyPostsWidget extends PureComponent {
+    // constructor(props) {
+    //     super(props);
+    //     this.state = { inEditFilters: { ...props.filters } };
+    // }
     state = {
-        editFilters: {
-            filter: '',
-            orderBy: 'latest'
-        },
-        itemsFilters: {
-            filter: '',
-            orderBy: 'latest'
-        },
-        page: 1
+        inEditFilters: null
     }
 
+    static getDerivedStateFromProps(nextProps, prevState) {
+        if (!prevState.inEditFilters && nextProps.filtersLoaded)
+            return { inEditFilters: nextProps.filters }
+
+        return null;
+    }
+
+    componentDidMount() {
+        // const { page, pageSize, blogId } = this.props;
+        // const { filter, orderBy } = this.props.filters;
+        // this.props.actions.loadPosts(filter, blogId, orderBy, page, pageSize);
+        setTimeout(() => {
+            this.props.search({ filter: '', orderBy: 'latest' })();
+        }, 1000);
+    }
+
+    componentDidUpdate(prevProps) {
+        const { page, pageSize, blogId } = this.props;
+        const { filter, orderBy } = this.props.filters;
+        if (prevProps.filters !== this.props.filters ||
+            prevProps.page !== page) {
+            this.props.actions.loadPosts(filter, blogId, orderBy, page, pageSize);
+        }
+    }
     handlePropertyChange = prop => ev => {
         const val = ev.target.value;
         this.setState(prevState => ({
-            editFilters: { ...prevState.editFilters, [prop]: val }
+            inEditFilters: { ...prevState.inEditFilters, [prop]: val }
         }));
     }
 
-    handleSearch = () => {
-        this.setState(prevState => {
-            return {
-                itemsFilters: { filter: prevState.editFilters.filter, orderBy: prevState.editFilters.orderBy }, page: 1
-            }
-        });
-    }
-
-    loadMore = () => {
-        this.setState((prevState) => ({ page: prevState.page + 1 }));
-    }
-
     render() {
+        const { posts, postsLoading, search, loadMore, filtersLoaded } = this.props;
+        const myPostsComponentProps = {
+            posts, postsLoading, search, loadMore,
+            onPropertyChange: this.handlePropertyChange,
+            filters: this.state.inEditFilters
+        };
         return (
-            <MyPostsComponentConnected
-                onPropertyChange={this.handlePropertyChange}
-                search={this.handleSearch}
-                {...this.state}
-                {...this.props}
-                loadMore={this.loadMore} />
-        );
+            <React.Fragment>
+                {filtersLoaded ? (<MyPostsComponent {...myPostsComponentProps} />)
+                    : (<div>Filters loading ...</div>)
+                }
+            </React.Fragment>
+        )
     }
 }
 
 function mapStateToProps(state, ownProps) {
     const { page, pageSize } = ownProps;
-    const { filter, orderBy } = ownProps.itemsFilters;
+    const { filter, orderBy } = ownProps.filters;
     const blogId = state.currentUser.blogId;
 
     const posts = getPosts(filter, blogId, orderBy, page, pageSize, state);
@@ -70,5 +83,32 @@ function mapDispatchToProps(dispatch) {
     };
 }
 
-const MyPostsComponentConnected = compose(connect(mapStateToProps, mapDispatchToProps))(MyPostsComponent);
-export default MyPostsWidget;
+const MyPostsWidgetConnected = compose(connect(mapStateToProps, mapDispatchToProps))(MyPostsWidget);
+
+class MyPostsWidgetLocalState extends PureComponent {
+    state = {
+        filters: {},
+        filtersLoaded: false,
+        page: 1
+    }
+
+    search = (filters) => () => {
+        this.setState({
+            filters: { filter: filters.filter, orderBy: filters.orderBy }, page: 1, filtersLoaded: true
+        });
+    }
+
+    loadMore = () => {
+        this.setState((prevState) => ({ page: prevState.page + 1 }));
+    }
+
+    render() {
+        return (
+            <MyPostsWidgetConnected {...this.props} {...this.state}
+                search={this.search}
+                loadMore={this.loadMore} />
+        );
+    }
+}
+
+export default MyPostsWidgetLocalState;

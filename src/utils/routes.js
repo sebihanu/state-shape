@@ -2,7 +2,7 @@ import React from 'react';
 import { Switch, Route, Redirect} from 'react-router-dom';
 
 import Dashboard from 'containers/Dashboard/Dashboard';
-import MyBlog from 'containers/MyBlog/MyBlog';
+import MyBlogPage from 'containers/MyBlog/MyBlogPage';
 import AddEditPost from 'containers/AddEditPost/AddEditPost';
 
 const NotFound = () => (
@@ -13,7 +13,7 @@ const NotFound = () => (
 
 export default (
   <Switch>                
-    <Route exact path="/myblog" component={MyBlog} />
+    <Route exact path="/myblog" component={MyBlogPage} />
     <Route exact path="/dashboard" component={Dashboard} />
     <Route path="/posts/:postId(\d+)" component={AddEditPost} />
     <Route exact path="/posts/:newPost(new)" component={AddEditPost} />
