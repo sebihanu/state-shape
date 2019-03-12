@@ -7,61 +7,54 @@ import EditPost from 'components/Posts/EditPost'
 import { getPost as getPostSelector } from 'selectors/posts'
 import { getPost as getPostAction, addUpdatePost } from 'actions/posts'
 
-const getPostId = props => {
-    return getInt(props.match.params.postId);
-}
 class AddEditPostWidget extends PureComponent {
     state = {
         post: null
     }
 
-    isNew() {
-        return this.props.match.params.newPost === 'new';
-    }
-
-    componentDidMount() {
-        if (!this.isNew()) {
-            const postId = getPostId(this.props);
-            this.props.actions.getPostAction(postId);
-        }
-    }
-
-    componentDidUpdate(prevProps) {
-        if (!prevProps.postSaved && this.props.postSaved) {
-            this.props.history.goBack();
-        }
-    }
-
-    static getDerivedStateFromProps(props, state) {
-        if (props.post && !state.post) {
+    static getDerivedStateFromProps(nextProps, prevState) {
+        if (nextProps.postLoaded && !prevState.post) {
             return {
-                post: { ...props.post }
+                post: { ...nextProps.post }
             }
         }
 
         return null;
     }
 
+    componentDidMount() {
+        const { isNew, postId } = this.props;
+        if (!isNew()) {            
+            this.props.actions.getPostAction(postId);
+        }
+    }
+
+    componentDidUpdate(prevProps) {
+        if (!prevProps.postSaved && this.props.postSaved) {
+            this.props.goBack();
+        }
+    }    
+
     handlePropertyChange = prop => ev => {
         const val = ev.target.value;
         this.setState(prevState => ({ post: { ...prevState.post, [prop]: val } }));
     }
 
-    handleSave = () => {        
+    handleSave = () => {
         this.props.actions.addUpdatePost(this.state.post);
     }
 
     render() {
-        const { postLoading, postLoaded, postSaving } = this.props;
+        const { postLoading, postLoaded, postSaving, goBack } = this.props;
         const { post } = this.state;
         return (
-            <div>                
+            <div>
                 {postLoading &&
                     <div>Loading</div>
                 }
                 {postLoaded &&
                     <React.Fragment>
-                        <Button onClick={() => this.props.history.goBack()}>Back</Button>
+                        <Button onClick={goBack}>Back</Button>
                         <EditPost {...post} onPropertyChange={this.handlePropertyChange} onSave={this.handleSave} saving={postSaving} />
                     </React.Fragment>
                 }
@@ -71,7 +64,7 @@ class AddEditPostWidget extends PureComponent {
 }
 
 function mapStateToProps(state, ownProps) {
-    const postId = getPostId(ownProps);
+    const { postId } = ownProps;
     return {
         post: getPostSelector(postId, state),
         postLoaded: state.posts.editPosts[postId] && state.posts.editPosts[postId].loaded,

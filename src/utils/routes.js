@@ -3,7 +3,7 @@ import { Switch, Route, Redirect} from 'react-router-dom';
 
 import Dashboard from 'containers/Dashboard/Dashboard';
 import MyBlogPage from 'containers/MyBlog/MyBlogPage';
-import AddEditPost from 'containers/AddEditPost/AddEditPost';
+import AddEditPostPage from 'containers/AddEditPost/AddEditPostPage';
 
 const NotFound = () => (
   <div>
@@ -15,8 +15,8 @@ export default (
   <Switch>                
     <Route exact path="/myblog" component={MyBlogPage} />
     <Route exact path="/dashboard" component={Dashboard} />
-    <Route path="/posts/:postId(\d+)" component={AddEditPost} />
-    <Route exact path="/posts/:newPost(new)" component={AddEditPost} />
+    <Route path="/posts/:postId(\d+)" component={AddEditPostPage} />
+    <Route exact path="/posts/:newPost(new)" component={AddEditPostPage} />
     <Redirect exact from="/" to="/dashboard" />
     <Route render={() => <NotFound title="PageNotFound"></NotFound>} />
   </Switch>
