@@ -1,37 +1,33 @@
 
 import * as types from 'actions/commentTypes';
 import initialState from 'utils/initialState';
-import { union } from 'lodash';
 
 const reducer = (state = initialState.comments.postComments, action) => {
     switch (action.type) {
         case types.LOAD_POSTCOMMENTS_STARTED: {
-            const { key } = action;
+            const { key, page } = action;
             let result = { ...state };
-            result[key] = { ...state[key], loading: true };
+            result[key] = { ...state[key] };
+            result[key][page] = { ...result[key][page], loading: true };
+
             return result;
         }
 
         case types.LOAD_POSTCOMMENTS_SUCCEEDED: {
             const { key, page } = action;
 
-            const currentIds = state[key] ? state[key].ids : [];
             let result = { ...state };
-            result[key] = { ...state[key], ids: union(currentIds, action.result), page, loading: false };            
+            result[key] = { ...state[key] };
+            result[key][page] = { ...result[key][page], ids: [...action.result], loading: false };
 
             return result;
         }
 
         case types.LOAD_POSTCOMMENTS_FAILED: {
-            const { key } = action;
+            const { key, page } = action;
             let result = { ...state };
-            result[key] = { ...state[key], loading: false };
+            result[key][page] = { ...result[key][page], loading: false };
             return result;
-        }
-
-        case types.REPLY_POST_SUCCEEDED: {
-            //const { key } = action;
-            return {};
         }
 
         default:

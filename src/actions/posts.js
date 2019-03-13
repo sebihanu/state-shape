@@ -12,7 +12,7 @@ export const loadPosts = (filter, blogId, orderBy, page, pageSize = 10) => { //l
         const key = loadPostsKey(filter, blogId, orderBy, pageSize);
 
         const posts = getState().posts.viewPosts[key];
-        let shouldCallApi = !(posts && posts[page] && !posts[page].loading);
+        let shouldCallApi = !(posts && posts[page]);
         if (!shouldCallApi) {
             return;
         }

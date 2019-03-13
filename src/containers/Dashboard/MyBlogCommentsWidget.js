@@ -14,13 +14,16 @@ class MyBlogCommentsWidget extends PureComponent {
 
     componentDidUpdate(prevProps) {
         const { blogId, page, pageSize } = this.props;
-        if (prevProps.page !== page) {            
+
+        if (this.props.page === 0) {
+            this.props.loadMore();
+        } else if (prevProps.page !== page) {
             this.props.actions.loadBlogComments(blogId, page, pageSize);
         }
-    }
-
-    loadMore = () => {
-        this.setState((prevState) => ({ page: prevState.page + 1 }));
+        //TODO ???
+        if (this.props.page && prevProps.page && this.props.commentsInvalid) {
+            this.props.resetPage();
+        }
     }
 
     render = () => {
@@ -32,7 +35,7 @@ class MyBlogCommentsWidget extends PureComponent {
     }
 }
 
-MyBlogCommentsWidget.propTypes = {    
+MyBlogCommentsWidget.propTypes = {
     comments: PropTypes.array.isRequired,
     commentsLoading: PropTypes.bool.isRequired,
     loadMore: PropTypes.func.isRequired,
@@ -47,11 +50,13 @@ MyBlogCommentsWidget.propTypes = {
 function mapStateToProps(state, ownProps) {
     const blogId = state.currentUser.blogId;
     const comments = getComments(blogId, ownProps.page, ownProps.pageSize, state);
-    const commentsLoading = getCommentsPageLoading(blogId, ownProps.page, ownProps.pageSize, state);
+    const commentsLoading = getCommentsPageLoading(blogId, ownProps.page, ownProps.pageSize, state);    
+    const commentsInvalid = state.comments.invalid;
 
     return {
         comments: comments,
         commentsLoading: commentsLoading,
+        commentsInvalid: commentsInvalid,
         blogId: blogId
     };
 }
@@ -73,15 +78,19 @@ class MyBlogCommentsLocalState extends PureComponent {
         this.setState((prevState) => ({ page: prevState.page + 1 }));
     }
 
+    resetPage = () => {
+        this.setState({ page: 0 });
+    }
+
     render() {
         return (
             <MyBlogCommentsConnected {...this.props} {...this.state}
-                loadMore={this.loadMore} />
+                loadMore={this.loadMore} resetPage={this.resetPage} />
         );
     }
 }
 
-MyBlogCommentsLocalState.propTypes = {        
+MyBlogCommentsLocalState.propTypes = {
     pageSize: PropTypes.number.isRequired
 };
 

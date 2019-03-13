@@ -6,10 +6,11 @@ const initialState = {
         blogLoading: false,
         blogLoaded: false
     },
-    comments: {
+    comments: {        
         blogComments: {},
         postComments: {},
-        postReplies: {}
+        postReplies: {},        
+        invalid: false
     },
     posts: {
         viewPosts: {},

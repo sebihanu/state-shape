@@ -1,22 +1,33 @@
 import createCachedSelector from 're-reselect'
 import * as commentActions from 'actions/comments';
+import { union } from 'lodash';
 
-const ids = (postId, pageSize, state) => {
+const ids = (postId, page, pageSize, state) => {
     const key = commentActions.loadPostCommentsKey(postId, pageSize);
-    return (state.comments.postComments[key] && state.comments.postComments[key].ids ? state.comments.postComments[key].ids : []);    
+    const comments = state.comments.postComments[key];
+    if (!comments) {
+        return [];
+    }
+    
+    const result = Object.entries(comments).reduce((acc, [k, v]) => {        
+        return union(acc, k <= page ? v.ids : []);
+    }, []);
+
+    return result;    
 }
-const comments = (postId, pageSize, state) => (state.entities.comments ? state.entities.comments : [])
+const comments = (postId, page, pageSize, state) => (state.entities.comments ? state.entities.comments : [])
 
 export const getComments = createCachedSelector(
     ids,
     comments,
     (ids, comments) => ids.map(id => comments[id])
 )(
-    (postId, pageSize, state) => commentActions.loadPostCommentsKey(postId, pageSize)
+    (postId, page, pageSize, state) => commentActions.loadPostCommentsKey(postId, pageSize)
 );
 
-export const getCommentsLoading = (postId, pageSize, state) => {
+export const getCommentsLoading = (postId, page, pageSize, state) => {
     const key = commentActions.loadPostCommentsKey(postId, pageSize);
-    const loading = state.comments.postComments[key] ? state.comments.postComments[key].loading : false
+    const comments = state.comments.postComments[key];
+    const loading = comments && comments[page] ? comments[page].loading : false
     return loading;
 };

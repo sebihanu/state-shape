@@ -30,11 +30,6 @@ const reducer = (state = initialState.comments.blogComments, action) => {
             return result;
         }
 
-        case types.REPLY_POST_SUCCEEDED: {
-            //const { key } = action;
-            return {};
-        }
-
         default:
             return state
     }

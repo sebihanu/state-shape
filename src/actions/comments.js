@@ -12,7 +12,8 @@ export const loadBlogComments = (blogId, page, pageSize = 10) => {
         const key = loadBlogCommentsKey(blogId, pageSize);
 
         const comments = getState().comments.blogComments[key];
-        let shouldCallApi = !(comments && comments[page] && !comments[page].loading);
+        let shouldCallApi = !(comments && comments[page]);
+        
         if (!shouldCallApi) {
             return;
         }
@@ -39,17 +40,17 @@ export const loadPostCommentsKey = (postId, pageSize) => {
     return JSON.stringify({ postId, pageSize });
 }
 
-export const loadPostComments = (postId, pageSize = 10, loadType = '') => { //loadType: '' as current, more, reload
+export const loadPostComments = (postId, page, pageSize = 10) => { 
     return async (dispatch, getState) => {
         const key = loadPostCommentsKey(postId, pageSize);
 
-        const comments = getState().comments.postComments[key];
-        let shouldCallApi = !(comments && comments.page) || loadType === 'more';
+        const comments = getState().comments.postComments[key];        
+        let shouldCallApi = !(comments && comments[page]);
         if (!shouldCallApi) {
             return;
         }
         //TODO implement reload
-        const page = (comments && comments.page) ? (loadType === 'more' ? comments.page + 1 : comments.page) : 1;
+        
         const loadCommentsAction = (prom) => ({
             [CALL_API]: {
                 prom: prom,
