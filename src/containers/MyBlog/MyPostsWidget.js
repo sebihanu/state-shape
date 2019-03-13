@@ -3,7 +3,7 @@ import { compose, bindActionCreators } from 'redux'
 import { connect } from 'react-redux';
 import { loadPosts } from 'actions/posts';
 import { getPosts, getPostsLoading } from 'selectors/posts'
-import MyPostsComponent from 'components/Posts/MyPosts'
+import MyPosts from 'components/Posts/MyPosts'
 
 class MyPostsWidget extends PureComponent {
     // constructor(props) {
@@ -54,7 +54,7 @@ class MyPostsWidget extends PureComponent {
         };
         return (
             <React.Fragment>
-                {filtersLoaded ? (<MyPostsComponent {...myPostsComponentProps} />)
+                {filtersLoaded ? (<MyPosts {...myPostsComponentProps} />)
                     : (<div>Filters loading ...</div>)
                 }
             </React.Fragment>

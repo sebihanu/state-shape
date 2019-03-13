@@ -2,18 +2,19 @@ import React, { PureComponent } from "react";
 import AddEditPostWidget from "./AddEditPostWidget";
 import { getInt } from 'utils/functions'
 
-const getPostId = props => {
-    return getInt(props.match.params.postId);
-}
-
 class AddEditPostPage extends PureComponent {
     goBack = () => this.props.history.goBack();
     isNew = () => this.props.match.params.newPost === 'new';
+    getPostId = () => getInt(this.props.match.params.postId);
 
     render() {
-        const postId = getPostId(this.props);
+        const AddEditPostWidgetProps = {
+            postId: this.getPostId(),
+            isNew: this.isNew(),
+            goBack: this.goBack
+        };
         return (
-            <AddEditPostWidget postId={postId} goBack={this.goBack} isNew={this.isNew} />
+            <AddEditPostWidget {...AddEditPostWidgetProps} />
         );
     }
 }

@@ -1,4 +1,5 @@
 import React, { PureComponent } from "react";
+import PropTypes from 'prop-types';
 import { compose, bindActionCreators } from 'redux'
 import { connect } from 'react-redux';
 import { Button } from '@material-ui/core';
@@ -23,7 +24,7 @@ class AddEditPostWidget extends PureComponent {
 
     componentDidMount() {
         const { isNew, postId } = this.props;
-        if (!isNew()) {            
+        if (!isNew) {
             this.props.actions.getPostAction(postId);
         }
     }
@@ -32,7 +33,7 @@ class AddEditPostWidget extends PureComponent {
         if (!prevProps.postSaved && this.props.postSaved) {
             this.props.goBack();
         }
-    }    
+    }
 
     handlePropertyChange = prop => ev => {
         const val = ev.target.value;
@@ -60,6 +61,20 @@ class AddEditPostWidget extends PureComponent {
             </div>
         );
     }
+}
+
+AddEditPostWidget.propTypes = {
+    isNew: PropTypes.bool.isRequired,
+    postId: PropTypes.number,
+    goBack: PropTypes.func,
+    post: PropTypes.object,
+    postLoaded: PropTypes.bool,
+    postSaving: PropTypes.bool,
+    postSaved: PropTypes.bool,
+    actions: PropTypes.shape({
+        getPostAction: PropTypes.func.isRequired, 
+        addUpdatePost: PropTypes.func.isRequired
+    })
 }
 
 function mapStateToProps(state, ownProps) {
