@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react";
+import React from "react";
 import { Button, TextField, RadioGroup, Radio, FormControlLabel, Grid } from '@material-ui/core';
 import { Link } from 'react-router-dom'
 import Post from './Post';

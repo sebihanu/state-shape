@@ -2,7 +2,6 @@ import React, { PureComponent } from "react";
 import { compose, bindActionCreators } from 'redux'
 import { connect } from 'react-redux';
 import { Button } from '@material-ui/core';
-import { getInt } from 'utils/functions'
 import EditPost from 'components/Posts/EditPost'
 import { getPost as getPostSelector } from 'selectors/posts'
 import { getPost as getPostAction, addUpdatePost } from 'actions/posts'
