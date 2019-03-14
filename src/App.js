@@ -1,28 +1,50 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { compose } from 'redux'
+import { connect } from 'react-redux';
+import Header from './components/layout/Header'
+import Main from './components/layout/Main'
+import Footer from './components/layout/Footer'
+import PropTypes from 'prop-types';
+import { loadMyBlog } from 'actions/blog';
 
-class App extends Component {
+class App extends React.PureComponent {
+
+  componentDidMount() {
+    this.props.actions.loadMyBlog();
+  }
+
   render() {
+    const { blogLoaded } = { ...this.props };
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+      blogLoaded ? (
+        <React.Fragment>
+          <Header />
+          <Main />
+          <Footer />
+        </React.Fragment>
+      ) : (
+        <div>Loading ...</div>
+      )
     );
   }
 }
 
-export default App;
+App.propTypes = {
+  match: PropTypes.object.isRequired,
+};
+
+function mapStateToProps(state) {
+  return {
+    blogLoaded: state.currentUser.blogLoaded
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: {
+      loadMyBlog: () => dispatch(loadMyBlog())
+    }
+  };
+}
+
+export default compose(connect(mapStateToProps, mapDispatchToProps))(App);
