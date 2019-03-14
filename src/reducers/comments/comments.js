@@ -15,7 +15,7 @@ const combinedReducer = combineReducers({
 const reducer = (state = initialState.comments, action) => {
     switch (action.type) {
         case types.REPLY_POST_SUCCEEDED: {
-            const postId = action.key;
+            const postId = action.key; //TODO send params
             const postComments = Object.keys(state.postComments).reduce((obj, key) => {
                 if (!key.includes(`"postId":${postId}`)) {
                     obj[key] = state.postComments[key]
