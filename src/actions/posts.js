@@ -17,7 +17,7 @@ export const loadPosts = (filter, blogId, orderBy, page, pageSize = 10) => { //l
             return;
         }
         //TODO implement reload
-        
+
         const loadPostsAction = (prom) => ({
             [CALL_API]: {
                 prom: prom,
@@ -35,10 +35,10 @@ export const loadPosts = (filter, blogId, orderBy, page, pageSize = 10) => { //l
     }
 }
 
-export const getPost = (postId, reload = false) => {
+export const loadPost = (postId, reload = false) => {
     return async (dispatch, getState) => {
         const post = getState().posts.editPosts[postId];
-        let shouldCallApi = reload || !(post && post.loaded && !post.loading);
+        let shouldCallApi = reload || !post || (!post.loaded && !post.loading);
         if (!shouldCallApi) {
             return;
         }
@@ -66,10 +66,31 @@ export const addUpdatePost = (post) => {
                 types: [types.UPDATE_POST_STARTED, types.UPDATE_POST_SUCCEEDED, types.UPDATE_POST_FAILED],
                 apiType: 'command',
                 key: post.id,
-                commandCallback: () => getPost(post.id, true)
+                commandCallback: () => loadPost(post.id, true)
             }
         });
 
         dispatch(action(api.updatePost));
+    }
+}
+
+export const loadPostsFilters = () => {
+    return async (dispatch, getState) => {
+        const filters = getState().postsFilters;
+        let shouldCallApi = !filters || (!filters.loaded && !filters.loading);
+        if (!shouldCallApi) {
+            return;
+        }
+
+        const action = (prom) => ({
+            [CALL_API]: {
+                prom: prom,
+                promParams: {},
+                types: [types.LOAD_POSTS_FILTERS_STARTED, types.LOAD_POSTS_FILTERS_SUCCEEDED, types.LOAD_POSTS_FILTERS_FAILED],
+                apiType: 'command'
+            }
+        });
+
+        dispatch(action(api.getPostsFilters));
     }
 }

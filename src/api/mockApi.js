@@ -107,7 +107,7 @@ export class MockApi {
         return MockApi.get(result);
     }
 
-    static replyPost(postId, userId, comment) {        
+    static replyPost(postId, userId, comment) {
         const id = db.comments.length;
         const blogId = db.posts.find(p => p.id === postId).blogId;
         const created = new Date();
@@ -118,8 +118,12 @@ export class MockApi {
             created,
             blogId
         };
-        db.comments.push(newComment);        
+        db.comments.push(newComment);
         return MockApi.get(null);
+    }
+
+    static getPostsFilters() {
+        return MockApi.get({ filter: '', orderBy: 'latest' });
     }
 
     //UC0: getUsers; getCategories; getSubCategoriesByCategory; getLabels

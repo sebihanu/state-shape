@@ -1,15 +1,11 @@
 import React, { PureComponent } from "react";
 import { compose, bindActionCreators } from 'redux'
 import { connect } from 'react-redux';
-import { loadPosts } from 'actions/posts';
+import { loadPosts, loadPostsFilters } from 'actions/posts';
 import { getPosts, getPostsLoading } from 'selectors/posts'
 import MyPosts from 'components/Posts/MyPosts'
 
 class MyPostsWidget extends PureComponent {
-    // constructor(props) {
-    //     super(props);
-    //     this.state = { inEditFilters: { ...props.filters } };
-    // }
     state = {
         inEditFilters: null
     }
@@ -22,20 +18,27 @@ class MyPostsWidget extends PureComponent {
     }
 
     componentDidMount() {
-        // const { page, pageSize, blogId } = this.props;
-        // const { filter, orderBy } = this.props.filters;
-        // this.props.actions.loadPosts(filter, blogId, orderBy, page, pageSize);
-        setTimeout(() => {
-            this.props.search({ filter: '', orderBy: 'latest' })();
-        }, 1000);
+        const { defaultFiltersLoaded, defaultFilters } = this.props;
+        if (!defaultFiltersLoaded) {
+            this.props.actions.loadPostsFilters();
+        } else {
+            this.props.search(defaultFilters)();
+        }
     }
 
     componentDidUpdate(prevProps) {
-        const { page, pageSize, blogId } = this.props;
-        const { filter, orderBy } = this.props.filters;
-        if (prevProps.filters !== this.props.filters ||
-            prevProps.page !== page) {
-            this.props.actions.loadPosts(filter, blogId, orderBy, page, pageSize);
+        const { page, pageSize, blogId, defaultFiltersLoading, defaultFiltersLoaded, defaultFilters } = this.props;
+
+        if (this.props.filters) {
+            const { filter, orderBy } = this.props.filters;
+            if (prevProps.filters !== this.props.filters ||
+                prevProps.page !== page) {
+                this.props.actions.loadPosts(filter, blogId, orderBy, page, pageSize);
+            }
+        }
+
+        if (prevProps.defaultFiltersLoading && !defaultFiltersLoading && defaultFiltersLoaded) {
+            this.props.search(defaultFilters)();
         }
     }
     handlePropertyChange = prop => ev => {
@@ -64,22 +67,32 @@ class MyPostsWidget extends PureComponent {
 
 function mapStateToProps(state, ownProps) {
     const { page, pageSize } = ownProps;
-    const { filter, orderBy } = ownProps.filters;
     const blogId = state.currentUser.blogId;
 
-    const posts = getPosts(filter, blogId, orderBy, page, pageSize, state);
-    const loading = getPostsLoading(filter, blogId, orderBy, page, pageSize, state);
+    let posts = null, loading = false;
+    if (ownProps.filters) {
+        const { filter, orderBy } = ownProps.filters;
+        posts = getPosts(filter, blogId, orderBy, page, pageSize, state);
+        loading = getPostsLoading(filter, blogId, orderBy, page, pageSize, state);
+    }
+
+    const defaultFilters = state.postsFilters.filters;
+    const defaultFiltersLoaded = state.postsFilters.loaded;
+    const defaultFiltersLoading = state.postsFilters.loading;
 
     return {
         posts: posts,
         postsLoading: loading,
-        blogId: blogId
+        blogId: blogId,
+        defaultFilters,
+        defaultFiltersLoaded,
+        defaultFiltersLoading
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        actions: bindActionCreators({ loadPosts }, dispatch)
+        actions: bindActionCreators({ loadPosts, loadPostsFilters }, dispatch)
     };
 }
 
@@ -87,7 +100,7 @@ const MyPostsWidgetConnected = compose(connect(mapStateToProps, mapDispatchToPro
 
 class MyPostsWidgetLocalState extends PureComponent {
     state = {
-        filters: {},
+        filters: null,
         filtersLoaded: false,
         page: 1
     }

@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Button } from '@material-ui/core';
 import EditPost from 'components/Posts/EditPost'
 import { getPost as getPostSelector } from 'selectors/posts'
-import { getPost as getPostAction, addUpdatePost } from 'actions/posts'
+import { loadPost, addUpdatePost } from 'actions/posts'
 
 class AddEditPostWidget extends PureComponent {
     state = {
@@ -25,7 +25,7 @@ class AddEditPostWidget extends PureComponent {
     componentDidMount() {
         const { isNew, postId } = this.props;
         if (!isNew) {
-            this.props.actions.getPostAction(postId);
+            this.props.actions.loadPost(postId);
         }
     }
 
@@ -72,7 +72,7 @@ AddEditPostWidget.propTypes = {
     postSaving: PropTypes.bool,
     postSaved: PropTypes.bool,
     actions: PropTypes.shape({
-        getPostAction: PropTypes.func.isRequired, 
+        loadPost: PropTypes.func.isRequired, 
         addUpdatePost: PropTypes.func.isRequired
     })
 }
@@ -90,7 +90,7 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        actions: bindActionCreators({ getPostAction, addUpdatePost }, dispatch)
+        actions: bindActionCreators({ loadPost, addUpdatePost }, dispatch)
     };
 }
 

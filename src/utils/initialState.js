@@ -6,16 +6,21 @@ const initialState = {
         blogLoading: false,
         blogLoaded: false
     },
-    comments: {        
+    comments: {
         blogComments: {},
         postComments: {},
-        postReplies: {},        
+        postReplies: {},
         invalid: false
     },
     posts: {
         viewPosts: {},
         editPosts: {}
-    }    
+    },
+    postsFilters: {
+        filters: {},
+        loading: false,
+        loaded: false
+    }
 };
 
 export default initialState;

@@ -41,18 +41,18 @@ function createApiMiddleware(extraArgument) {
             response => {
                 //const json = JSON.stringify(response);                                
                 if (apiType === 'command') {
-                    next(actionWith(getSuccessTypeData(successType, callAPI, promParams)));
+                    next(actionWith(getSuccessTypeData(successType, callAPI, { payload: response })));
                     const { commandCallback } = callAPI;
-                    if (commandCallback){                        
+                    if (commandCallback) {
                         dispatch(commandCallback());
                     }
-                    
+
                     return;
                 }
 
                 const camelizedJson = camelizeKeys(response);
                 let payload = Object.assign({}, normalize(camelizedJson, schema));
-                
+
                 return next(actionWith(getSuccessTypeData(successType, callAPI, payload)))
             },
             error => next(actionWith(getFailureTypeData(failureType, callAPI, error.message || 'Something bad happened'))));
@@ -61,7 +61,7 @@ function createApiMiddleware(extraArgument) {
 
 const getRequestTypeData = (type, callAPI) => {
     const { apiType, key } = callAPI;
-    if (apiType === 'list'){
+    if (apiType === 'list') {
         const { page } = callAPI;
         return { type, key, page };
     }
@@ -71,11 +71,11 @@ const getRequestTypeData = (type, callAPI) => {
 
 const getFailureTypeData = (type, callAPI, error) => {
     const { apiType, key } = callAPI;
-    if (apiType === 'list'){
+    if (apiType === 'list') {
         const { page } = callAPI;
         return { type, key, page, error };
     }
-        
+
     return { type, key, error };
 }
 
