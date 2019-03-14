@@ -8,12 +8,12 @@ const ids = (postId, page, pageSize, state) => {
     if (!comments) {
         return [];
     }
-    
-    const result = Object.entries(comments).reduce((acc, [k, v]) => {        
+
+    const result = Object.entries(comments).reduce((acc, [k, v]) => {
         return union(acc, k <= page ? v.ids : []);
     }, []);
 
-    return result;    
+    return result;
 }
 const comments = (postId, page, pageSize, state) => (state.entities.comments ? state.entities.comments : [])
 
@@ -30,4 +30,16 @@ export const getCommentsLoading = (postId, page, pageSize, state) => {
     const comments = state.comments.postComments[key];
     const loading = comments && comments[page] ? comments[page].loading : false
     return loading;
+};
+
+export const getReplying = (postId, state) => {
+    const postReplies = state.comments.postReplies;
+    const replying = postReplies && postReplies[postId] ? postReplies[postId].saving : false
+    return replying;
+};
+
+export const getReplied = (postId, state) => {
+    const postReplies = state.comments.postReplies;
+    const replied = postReplies && postReplies[postId] ? postReplies[postId].saved : false
+    return replied;
 };

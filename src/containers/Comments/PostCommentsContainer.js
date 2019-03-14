@@ -4,7 +4,7 @@ import { compose } from 'redux'
 import { connect } from 'react-redux';
 import PostComments from 'components/Comments/PostComments'
 import { loadPostComments, reply } from 'actions/comments';
-import { getComments, getCommentsLoading } from 'selectors/postComments'
+import { getComments, getCommentsLoading, getReplying, getReplied } from 'selectors/postComments'
 
 class PostCommentsContainer extends PureComponent {
     state = {
@@ -13,20 +13,25 @@ class PostCommentsContainer extends PureComponent {
     }
 
     componentDidUpdate(prevProps) {
-        const { postId, page, pageSize } = this.props;
-        if (prevProps.page !== page) {
+        const { postId, page, pageSize, replying, replied } = this.props;
+
+        if (this.props.page === 0) {
+            this.props.loadMore();
+        } else if (prevProps.page !== page) {
             this.props.actions.loadPostComments(postId, page, pageSize);
+        }
+        
+        if (prevProps.replying && !replying && replied) {
+            //console.warn(`${postId}-${prevProps.replying}-${prevProps.replied}-${replying}-${replied}`);
+            this.setState({ newComment: '' });
+            this.props.resetPage();
         }
     }
 
     reply = () => {
         const { postId } = this.props;
         const { newComment } = this.state;
-        this.props.actions.reply(postId, newComment);
-
-        setTimeout(() => {
-            this.props.loadFirstPage();
-        }, 1000);
+        this.props.actions.reply(postId, newComment);        
     }
 
     handleSwitchChange = event => {
@@ -59,11 +64,13 @@ function mapStateToProps(state, ownProps) {
     const { postId, page, pageSize } = ownProps;
     const comments = getComments(postId, page, pageSize, state);
     const loading = getCommentsLoading(postId, page, pageSize, state);
-    const replying = true;
+    const replying = getReplying(postId, state);
+    const replied = getReplied(postId, state);
     return {
         comments: comments,
         commentsLoading: loading,
-        replying
+        replying: replying,
+        replied: replied
     };
 }
 
@@ -87,14 +94,14 @@ class PostCommentsContainerLocalState extends PureComponent {
         this.setState((prevState) => ({ page: prevState.page + 1 }));
     }
 
-    loadFirstPage = () => {
-        this.setState({ page: 1 });
+    resetPage = () => {
+        this.setState({ page: 0 });
     }
 
     render() {
         return (
             <PostCommentsContainerConnected {...this.props} {...this.state}
-                loadMore={this.loadMore} loadFirstPage={this.loadFirstPage} />
+                loadMore={this.loadMore} resetPage={this.resetPage} />
         );
     }
 }

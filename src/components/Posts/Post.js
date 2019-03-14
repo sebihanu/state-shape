@@ -23,7 +23,7 @@ const post = (props) => {
                 <div>{props.content}</div>
             </Grid>            
             <Grid item sm={12}>
-                <PostCommentsContainer postId={props.id} pageSize={3} />
+                <PostCommentsContainer postId={props.id} pageSize={2} />
             </Grid>
             <Grid item sm={12}>
                 <Divider />

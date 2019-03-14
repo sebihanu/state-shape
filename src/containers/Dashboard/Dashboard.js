@@ -7,11 +7,11 @@ class Dashboard extends Component {
     render() {
         return (
             <Grid container spacing={24}>
-                <Grid item>
+                <Grid item sm={4}>
                     <MyBlogCommentsWidget pageSize={4} />
                 </Grid>
-                <Grid item>
-                    <MyLatestPostsWidget pageSize={4} />
+                <Grid item sm={4}>
+                    <MyLatestPostsWidget pageSize={3}/>
                 </Grid>
             </Grid>
         );
