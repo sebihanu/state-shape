@@ -10,7 +10,7 @@ class MyBlogPage extends PureComponent {
                     
                 </Grid>
                 <Grid item>
-                    <MyPostsWidget pageSize={4} />
+                    <MyPostsWidget pageSize={3} />
                 </Grid>
             </Grid>
         );
