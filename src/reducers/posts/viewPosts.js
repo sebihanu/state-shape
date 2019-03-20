@@ -14,10 +14,10 @@ const reducer = (state = initialState.posts.viewPosts, action) => {
 
         case types.LOAD_POSTS_SUCCEEDED: {
             const { key, page } = action;
-            
+
             let result = { ...state };
             result[key] = { ...state[key] };
-            result[key][page] = { ...result[key][page], ids: [...action.result], loading: false };            
+            result[key][page] = { ...result[key][page], ids: [...action.result], loading: false };
 
             return result;
         }
@@ -27,6 +27,10 @@ const reducer = (state = initialState.posts.viewPosts, action) => {
             let result = { ...state };
             result[key][page] = { ...result[key][page], loading: false };
             return result;
+        }
+
+        case types.UPDATE_POST_SUCCEEDED: {
+            return {};
         }
 
         default:
