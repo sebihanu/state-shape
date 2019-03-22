@@ -36,7 +36,7 @@ class Header extends React.PureComponent {
                     <Typography variant="h6" color="inherit" className={classes.grow}>
                         React
                     </Typography>
-                    <NavLink to="/" style={linkStyle}>Dashboard</NavLink>
+                    <NavLink to="/dashboard" style={linkStyle}>Dashboard</NavLink>
                     <NavLink to="/myblog" style={linkStyle}>My blog</NavLink>
                     <NavLink to="/bus" style={linkStyle}>Bus</NavLink>
                 </Toolbar>

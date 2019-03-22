@@ -8,7 +8,7 @@ class Subscriber extends PureComponent {
 
     constructor(props) {
         super(props);
-        this.token = this.props.PubSub.subscribe('TOPIC1', this.received);
+        this.token = this.props.PubSub.subscribe(this.props.topic, this.received);
     }
 
     componentWillUnmount() {

@@ -4,15 +4,16 @@ import Publisher from './Publisher'
 import Subscriber from "./Subscriber";
 import PubSub from 'pubsub-js'
 
+const TOPIC1 = "TOPIC1";
 class MessageBusPage extends PureComponent {
     render() {
         return (
             <Grid container spacing={24}>
                 <Grid item sm={4}>
-                    <Publisher PubSub={PubSub} />
+                    <Publisher PubSub={PubSub} topic={TOPIC1} />
                 </Grid>
                 <Grid item sm={4}>
-                    <Subscriber PubSub={PubSub}/>
+                    <Subscriber PubSub={PubSub} topic={TOPIC1}/>
                 </Grid>
             </Grid>
         );
